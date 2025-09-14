@@ -32,28 +32,297 @@ const Wallet = () => {
         }).format(amount);
     };
 
+    // Mobile-first inline styles
+    const styles = {
+        container: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '24px'
+        },
+
+        // Balance Card styles
+        balanceCard: {
+            background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
+            borderRadius: '16px',
+            padding: '32px',
+            color: 'white',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)'
+        },
+        balanceHeader: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '16px'
+        },
+        balanceHeaderLeft: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+        },
+        walletIcon: {
+            width: '32px',
+            height: '32px'
+        },
+        balanceTitle: {
+            fontSize: '20px',
+            fontWeight: '600',
+            margin: '0'
+        },
+        refreshButton: {
+            padding: '8px',
+            borderRadius: '8px',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s ease',
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        },
+        refreshButtonHover: {
+            backgroundColor: 'rgba(255, 255, 255, 0.3)'
+        },
+        refreshIcon: {
+            width: '20px',
+            height: '20px'
+        },
+        refreshIconSpinning: {
+            animation: 'spin 1s linear infinite'
+        },
+        balanceSection: {
+            marginBottom: '24px'
+        },
+        balanceLabel: {
+            color: '#bfdbfe',
+            fontSize: '14px',
+            marginBottom: '8px',
+            margin: '0 0 8px 0'
+        },
+        balanceDisplay: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+        },
+        balanceAmount: {
+            fontSize: '36px',
+            fontWeight: '700',
+            margin: '0'
+        },
+        toggleButton: {
+            padding: '4px',
+            borderRadius: '50%',
+            backgroundColor: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s ease',
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        },
+        toggleButtonHover: {
+            backgroundColor: 'rgba(255, 255, 255, 0.2)'
+        },
+        toggleIcon: {
+            width: '20px',
+            height: '20px'
+        },
+        balanceFooter: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            fontSize: '14px'
+        },
+        balanceFooterText: {
+            color: '#bfdbfe',
+            margin: '0'
+        },
+
+        // Quick Actions styles
+        quickActionsGrid: {
+            display: 'grid',
+            gridTemplateColumns: '1fr',
+            gap: '16px',
+            '@media (min-width: 768px)': {
+                gridTemplateColumns: 'repeat(3, 1fr)'
+            }
+        },
+        quickActionCard: {
+            backgroundColor: 'white',
+            padding: '24px',
+            borderRadius: '12px',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #f3f4f6'
+        },
+        quickActionHeader: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            marginBottom: '12px'
+        },
+        quickActionIconContainer: {
+            padding: '8px',
+            borderRadius: '8px'
+        },
+        quickActionIconContainerGreen: {
+            backgroundColor: '#f0fdf4'
+        },
+        quickActionIconContainerRed: {
+            backgroundColor: '#fef2f2'
+        },
+        quickActionIconContainerBlue: {
+            backgroundColor: '#eff6ff'
+        },
+        quickActionIcon: {
+            width: '20px',
+            height: '20px'
+        },
+        quickActionIconGreen: {
+            color: '#16a34a'
+        },
+        quickActionIconRed: {
+            color: '#dc2626'
+        },
+        quickActionIconBlue: {
+            color: '#2563eb'
+        },
+        quickActionTitle: {
+            fontWeight: '500',
+            color: '#111827',
+            fontSize: '16px',
+            margin: '0'
+        },
+        quickActionAmount: {
+            fontSize: '32px',
+            fontWeight: '700',
+            color: '#111827',
+            margin: '0 0 4px 0'
+        },
+        quickActionSubtitle: {
+            fontSize: '14px',
+            margin: '0'
+        },
+        quickActionSubtitleGreen: {
+            color: '#16a34a'
+        },
+        quickActionSubtitleRed: {
+            color: '#dc2626'
+        },
+        quickActionSubtitleBlue: {
+            color: '#2563eb'
+        },
+
+        // Quick Tips styles
+        tipsCard: {
+            backgroundColor: 'white',
+            padding: '24px',
+            borderRadius: '12px',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #f3f4f6'
+        },
+        tipsTitle: {
+            fontWeight: '600',
+            color: '#111827',
+            fontSize: '18px',
+            margin: '0 0 16px 0'
+        },
+        tipsList: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+        },
+        tipItem: {
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: '12px'
+        },
+        tipNumber: {
+            width: '24px',
+            height: '24px',
+            backgroundColor: '#eff6ff',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#2563eb',
+            fontSize: '14px',
+            fontWeight: '500',
+            marginTop: '2px',
+            flexShrink: '0'
+        },
+        tipContent: {
+            flex: '1'
+        },
+        tipContentTitle: {
+            color: '#111827',
+            fontWeight: '500',
+            fontSize: '16px',
+            margin: '0 0 4px 0'
+        },
+        tipContentDescription: {
+            color: '#6b7280',
+            fontSize: '14px',
+            margin: '0',
+            lineHeight: '1.5'
+        }
+    };
+
+    // Add CSS keyframes for animation
+    React.useEffect(() => {
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            
+            @media (min-width: 768px) {
+                .quick-actions-grid {
+                    grid-template-columns: repeat(3, 1fr);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        return () => {
+            if (document.head.contains(style)) {
+                document.head.removeChild(style);
+            }
+        };
+    }, []);
+
     return (
-        <div className="space-y-6">
+        <div style={styles.container}>
             {/* Balance Card */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white shadow-lg">
-                <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center space-x-3">
-                        <WalletIcon className="w-8 h-8" />
-                        <h2 className="text-xl font-semibold">TradePay Wallet</h2>
+            <div style={styles.balanceCard}>
+                <div style={styles.balanceHeader}>
+                    <div style={styles.balanceHeaderLeft}>
+                        <WalletIcon style={styles.walletIcon} />
+                        <h2 style={styles.balanceTitle}>TradePay Wallet</h2>
                     </div>
                     <button
                         onClick={refreshBalance}
-                        className={`p-2 rounded-lg bg-white/20 hover:bg-white/30 transition-colors ${isRefreshing ? 'animate-spin' : ''
-                            }`}
+                        style={styles.refreshButton}
+                        onMouseEnter={(e) => {
+                            Object.assign(e.target.style, styles.refreshButtonHover);
+                        }}
+                        onMouseLeave={(e) => {
+                            e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                        }}
                     >
-                        <RefreshCw className="w-5 h-5" />
+                        <RefreshCw 
+                            style={{
+                                ...styles.refreshIcon,
+                                ...(isRefreshing ? styles.refreshIconSpinning : {})
+                            }} 
+                        />
                     </button>
                 </div>
 
-                <div className="mb-6">
-                    <p className="text-blue-100 text-sm mb-2">Available Balance</p>
-                    <div className="flex items-center space-x-3">
-                        <span className="text-4xl font-bold">
+                <div style={styles.balanceSection}>
+                    <p style={styles.balanceLabel}>Available Balance</p>
+                    <div style={styles.balanceDisplay}>
+                        <span style={styles.balanceAmount}>
                             {showBalance
                                 ? formatCurrency(userData?.balance || 0)
                                 : '₹ ••••••'
@@ -61,84 +330,120 @@ const Wallet = () => {
                         </span>
                         <button
                             onClick={() => setShowBalance(!showBalance)}
-                            className="p-1 rounded-full hover:bg-white/20 transition-colors"
+                            style={styles.toggleButton}
+                            onMouseEnter={(e) => {
+                                Object.assign(e.target.style, styles.toggleButtonHover);
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = 'transparent';
+                            }}
                         >
-                            {showBalance ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
+                            {showBalance ? <Eye style={styles.toggleIcon} /> : <EyeOff style={styles.toggleIcon} />}
                         </button>
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between text-sm">
-                    <span className="text-blue-100">Account: {userData?.email}</span>
-                    <span className="text-blue-100">Expo Credits</span>
+                <div style={styles.balanceFooter}>
+                    <span style={styles.balanceFooterText}>Account: {userData?.email}</span>
+                    <span style={styles.balanceFooterText}>Expo Credits</span>
                 </div>
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <div className="flex items-center space-x-3 mb-3">
-                        <div className="bg-green-100 p-2 rounded-lg">
-                            <TrendingUp className="w-5 h-5 text-green-600" />
+            <div 
+                style={styles.quickActionsGrid} 
+                className="quick-actions-grid"
+            >
+                <div style={styles.quickActionCard}>
+                    <div style={styles.quickActionHeader}>
+                        <div style={{
+                            ...styles.quickActionIconContainer,
+                            ...styles.quickActionIconContainerGreen
+                        }}>
+                            <TrendingUp style={{
+                                ...styles.quickActionIcon,
+                                ...styles.quickActionIconGreen
+                            }} />
                         </div>
-                        <h3 className="font-medium text-gray-900">Money Received</h3>
+                        <h3 style={styles.quickActionTitle}>Money Received</h3>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900">₹ 0</p>
-                    <p className="text-green-600 text-sm">This month</p>
+                    <p style={styles.quickActionAmount}>₹ 0</p>
+                    <p style={{
+                        ...styles.quickActionSubtitle,
+                        ...styles.quickActionSubtitleGreen
+                    }}>This month</p>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <div className="flex items-center space-x-3 mb-3">
-                        <div className="bg-red-100 p-2 rounded-lg">
-                            <TrendingDown className="w-5 h-5 text-red-600" />
+                <div style={styles.quickActionCard}>
+                    <div style={styles.quickActionHeader}>
+                        <div style={{
+                            ...styles.quickActionIconContainer,
+                            ...styles.quickActionIconContainerRed
+                        }}>
+                            <TrendingDown style={{
+                                ...styles.quickActionIcon,
+                                ...styles.quickActionIconRed
+                            }} />
                         </div>
-                        <h3 className="font-medium text-gray-900">Money Sent</h3>
+                        <h3 style={styles.quickActionTitle}>Money Sent</h3>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900">₹ 0</p>
-                    <p className="text-red-600 text-sm">This month</p>
+                    <p style={styles.quickActionAmount}>₹ 0</p>
+                    <p style={{
+                        ...styles.quickActionSubtitle,
+                        ...styles.quickActionSubtitleRed
+                    }}>This month</p>
                 </div>
 
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <div className="flex items-center space-x-3 mb-3">
-                        <div className="bg-blue-100 p-2 rounded-lg">
-                            <WalletIcon className="w-5 h-5 text-blue-600" />
+                <div style={styles.quickActionCard}>
+                    <div style={styles.quickActionHeader}>
+                        <div style={{
+                            ...styles.quickActionIconContainer,
+                            ...styles.quickActionIconContainerBlue
+                        }}>
+                            <WalletIcon style={{
+                                ...styles.quickActionIcon,
+                                ...styles.quickActionIconBlue
+                            }} />
                         </div>
-                        <h3 className="font-medium text-gray-900">Transactions</h3>
+                        <h3 style={styles.quickActionTitle}>Transactions</h3>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900">0</p>
-                    <p className="text-blue-600 text-sm">Total count</p>
+                    <p style={styles.quickActionAmount}>0</p>
+                    <p style={{
+                        ...styles.quickActionSubtitle,
+                        ...styles.quickActionSubtitleBlue
+                    }}>Total count</p>
                 </div>
             </div>
 
             {/* Quick Tips */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h3 className="font-semibold text-gray-900 mb-4">Getting Started</h3>
-                <div className="space-y-3">
-                    <div className="flex items-start space-x-3">
-                        <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-sm font-medium mt-0.5">
-                            1
-                        </div>
-                        <div>
-                            <p className="text-gray-900 font-medium">Start Trading</p>
-                            <p className="text-gray-600 text-sm">Use the Transfer tab to send money to other traders</p>
-                        </div>
-                    </div>
-                    <div className="flex items-start space-x-3">
-                        <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-sm font-medium mt-0.5">
-                            2
-                        </div>
-                        <div>
-                            <p className="text-gray-900 font-medium">Track Transactions</p>
-                            <p className="text-gray-600 text-sm">Monitor all your trading activities in the History tab</p>
+            <div style={styles.tipsCard}>
+                <h3 style={styles.tipsTitle}>Getting Started</h3>
+                <div style={styles.tipsList}>
+                    <div style={styles.tipItem}>
+                        <div style={styles.tipNumber}>1</div>
+                        <div style={styles.tipContent}>
+                            <p style={styles.tipContentTitle}>Start Trading</p>
+                            <p style={styles.tipContentDescription}>
+                                Use the Transfer tab to send money to other traders
+                            </p>
                         </div>
                     </div>
-                    <div className="flex items-start space-x-3">
-                        <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-sm font-medium mt-0.5">
-                            3
+                    <div style={styles.tipItem}>
+                        <div style={styles.tipNumber}>2</div>
+                        <div style={styles.tipContent}>
+                            <p style={styles.tipContentTitle}>Track Transactions</p>
+                            <p style={styles.tipContentDescription}>
+                                Monitor all your trading activities in the History tab
+                            </p>
                         </div>
-                        <div>
-                            <p className="text-gray-900 font-medium">Stay Updated</p>
-                            <p className="text-gray-600 text-sm">Refresh your balance regularly to see the latest updates</p>
+                    </div>
+                    <div style={styles.tipItem}>
+                        <div style={styles.tipNumber}>3</div>
+                        <div style={styles.tipContent}>
+                            <p style={styles.tipContentTitle}>Stay Updated</p>
+                            <p style={styles.tipContentDescription}>
+                                Refresh your balance regularly to see the latest updates
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -61,41 +61,301 @@ const TransactionHistory = () => {
         });
     };
 
+    // Mobile-first inline styles
+    const styles = {
+        container: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px'
+        },
+        
+        // Loading component styles
+        loadingCard: {
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+            padding: '24px'
+        },
+        loadingContent: {
+            textAlign: 'center'
+        },
+        loadingSpinner: {
+            width: '32px',
+            height: '32px',
+            color: '#2563eb',
+            margin: '0 auto 16px',
+            animation: 'spin 1s linear infinite'
+        },
+        loadingText: {
+            color: '#6b7280',
+            fontSize: '14px',
+            margin: '0'
+        },
+
+        // Header card styles
+        headerCard: {
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+            padding: '16px'
+        },
+        headerTop: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '20px'
+        },
+        headerLeft: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+        },
+        iconContainer: {
+            backgroundColor: '#f3e8ff',
+            padding: '10px',
+            borderRadius: '12px'
+        },
+        icon: {
+            width: '20px',
+            height: '20px',
+            color: '#7c3aed'
+        },
+        headerText: {
+            display: 'flex',
+            flexDirection: 'column'
+        },
+        title: {
+            fontSize: '18px',
+            fontWeight: '700',
+            color: '#111827',
+            margin: '0 0 2px 0'
+        },
+        subtitle: {
+            color: '#6b7280',
+            fontSize: '12px',
+            margin: '0'
+        },
+        refreshButton: {
+            padding: '8px',
+            borderRadius: '8px',
+            border: '1px solid #d1d5db',
+            backgroundColor: 'white',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s ease',
+            minHeight: '40px',
+            minWidth: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        },
+        refreshIcon: {
+            width: '18px',
+            height: '18px',
+            color: '#6b7280'
+        },
+
+        // Filter tabs styles
+        filterContainer: {
+            display: 'flex',
+            gap: '4px',
+            backgroundColor: '#f3f4f6',
+            padding: '4px',
+            borderRadius: '8px'
+        },
+        filterButton: {
+            flex: '1',
+            padding: '10px 12px',
+            borderRadius: '6px',
+            fontWeight: '500',
+            fontSize: '14px',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            minHeight: '44px'
+        },
+        filterButtonActive: {
+            backgroundColor: 'white',
+            color: '#111827',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+        },
+        filterButtonInactive: {
+            backgroundColor: 'transparent',
+            color: '#6b7280'
+        },
+
+        // Transactions list styles
+        transactionsCard: {
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+        },
+
+        // Empty state styles
+        emptyState: {
+            padding: '32px 16px',
+            textAlign: 'center'
+        },
+        emptyIcon: {
+            width: '48px',
+            height: '48px',
+            color: '#9ca3af',
+            margin: '0 auto 16px'
+        },
+        emptyTitle: {
+            fontSize: '16px',
+            fontWeight: '500',
+            color: '#111827',
+            margin: '0 0 8px 0'
+        },
+        emptyDescription: {
+            color: '#6b7280',
+            fontSize: '14px',
+            margin: '0',
+            lineHeight: '1.5'
+        },
+
+        // Transaction item styles
+        transactionsList: {
+            display: 'flex',
+            flexDirection: 'column'
+        },
+        transactionItem: {
+            padding: '16px',
+            borderBottom: '1px solid #f3f4f6',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s ease'
+        },
+        transactionItemLast: {
+            borderBottom: 'none'
+        },
+        transactionContent: {
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: '12px'
+        },
+        transactionIcon: {
+            padding: '8px',
+            borderRadius: '8px',
+            flexShrink: '0'
+        },
+        transactionIconSent: {
+            backgroundColor: '#fef2f2'
+        },
+        transactionIconReceived: {
+            backgroundColor: '#f0fdf4'
+        },
+        transactionIconInner: {
+            width: '18px',
+            height: '18px'
+        },
+        transactionIconSentColor: {
+            color: '#dc2626'
+        },
+        transactionIconReceivedColor: {
+            color: '#16a34a'
+        },
+        transactionDetails: {
+            flex: '1',
+            minWidth: '0'
+        },
+        transactionHeader: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            gap: '8px'
+        },
+        transactionLeft: {
+            flex: '1',
+            minWidth: '0'
+        },
+        transactionName: {
+            fontWeight: '500',
+            color: '#111827',
+            fontSize: '14px',
+            margin: '0 0 2px 0'
+        },
+        transactionDescription: {
+            fontSize: '12px',
+            color: '#6b7280',
+            margin: '0',
+            lineHeight: '1.4'
+        },
+        transactionRight: {
+            textAlign: 'right',
+            flexShrink: '0'
+        },
+        transactionAmount: {
+            fontWeight: '600',
+            fontSize: '14px',
+            margin: '0 0 2px 0'
+        },
+        transactionAmountSent: {
+            color: '#dc2626'
+        },
+        transactionAmountReceived: {
+            color: '#16a34a'
+        },
+        transactionDate: {
+            fontSize: '11px',
+            color: '#9ca3af',
+            margin: '0'
+        }
+    };
+
+    // Add CSS keyframes for animation
+    React.useEffect(() => {
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+        return () => document.head.removeChild(style);
+    }, []);
+
     if (loading) {
         return (
-            <div className="bg-white rounded-2xl shadow-sm p-8">
-                <div className="text-center">
-                    <RefreshCw className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-                    <p className="text-gray-600">Loading transactions...</p>
+            <div style={styles.loadingCard}>
+                <div style={styles.loadingContent}>
+                    <RefreshCw style={styles.loadingSpinner} />
+                    <p style={styles.loadingText}>Loading transactions...</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="space-y-6">
+        <div style={styles.container}>
             {/* Header */}
-            <div className="bg-white rounded-2xl shadow-sm p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center space-x-3">
-                        <div className="bg-purple-100 p-3 rounded-xl">
-                            <HistoryIcon className="w-6 h-6 text-purple-600" />
+            <div style={styles.headerCard}>
+                <div style={styles.headerTop}>
+                    <div style={styles.headerLeft}>
+                        <div style={styles.iconContainer}>
+                            <HistoryIcon style={styles.icon} />
                         </div>
-                        <div>
-                            <h2 className="text-xl font-bold text-gray-900">Transaction History</h2>
-                            <p className="text-gray-600 text-sm">Track all your trading activities</p>
+                        <div style={styles.headerText}>
+                            <h2 style={styles.title}>Transaction History</h2>
+                            <p style={styles.subtitle}>Track all your trading activities</p>
                         </div>
                     </div>
                     <button
                         onClick={loadTransactions}
-                        className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+                        style={styles.refreshButton}
+                        onMouseEnter={(e) => {
+                            e.target.style.backgroundColor = '#f9fafb';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.target.style.backgroundColor = 'white';
+                        }}
                     >
-                        <RefreshCw className="w-5 h-5 text-gray-600" />
+                        <RefreshCw style={styles.refreshIcon} />
                     </button>
                 </div>
 
                 {/* Filter Tabs */}
-                <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+                <div style={styles.filterContainer}>
                     {[
                         { id: 'all', label: 'All' },
                         { id: 'sent', label: 'Sent' },
@@ -104,10 +364,20 @@ const TransactionHistory = () => {
                         <button
                             key={tab.id}
                             onClick={() => setFilter(tab.id)}
-                            className={`flex-1 py-2 px-4 rounded-md font-medium text-sm transition-all ${filter === tab.id
-                                    ? 'bg-white text-gray-900 shadow-sm'
-                                    : 'text-gray-600 hover:text-gray-900'
-                                }`}
+                            style={{
+                                ...styles.filterButton,
+                                ...(filter === tab.id ? styles.filterButtonActive : styles.filterButtonInactive)
+                            }}
+                            onMouseEnter={(e) => {
+                                if (filter !== tab.id) {
+                                    e.target.style.color = '#111827';
+                                }
+                            }}
+                            onMouseLeave={(e) => {
+                                if (filter !== tab.id) {
+                                    e.target.style.color = '#6b7280';
+                                }
+                            }}
                         >
                             {tab.label}
                         </button>
@@ -116,12 +386,12 @@ const TransactionHistory = () => {
             </div>
 
             {/* Transactions List */}
-            <div className="bg-white rounded-2xl shadow-sm">
+            <div style={styles.transactionsCard}>
                 {filteredTransactions.length === 0 ? (
-                    <div className="p-8 text-center">
-                        <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">No transactions yet</h3>
-                        <p className="text-gray-600">
+                    <div style={styles.emptyState}>
+                        <Calendar style={styles.emptyIcon} />
+                        <h3 style={styles.emptyTitle}>No transactions yet</h3>
+                        <p style={styles.emptyDescription}>
                             {filter === 'all'
                                 ? 'Start trading to see your transaction history here'
                                 : `No ${filter} transactions found`
@@ -129,43 +399,63 @@ const TransactionHistory = () => {
                         </p>
                     </div>
                 ) : (
-                    <div className="divide-y divide-gray-100">
-                        {filteredTransactions.map((transaction) => (
-                            <div key={transaction.id} className="p-6 hover:bg-gray-50 transition-colors">
-                                <div className="flex items-center space-x-4">
-                                    <div className={`p-2 rounded-lg ${transaction.type === 'sent'
-                                            ? 'bg-red-100'
-                                            : 'bg-green-100'
-                                        }`}>
+                    <div style={styles.transactionsList}>
+                        {filteredTransactions.map((transaction, index) => (
+                            <div 
+                                key={transaction.id} 
+                                style={{
+                                    ...styles.transactionItem,
+                                    ...(index === filteredTransactions.length - 1 ? styles.transactionItemLast : {})
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor = '#f9fafb';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor = 'white';
+                                }}
+                            >
+                                <div style={styles.transactionContent}>
+                                    <div style={{
+                                        ...styles.transactionIcon,
+                                        ...(transaction.type === 'sent' ? styles.transactionIconSent : styles.transactionIconReceived)
+                                    }}>
                                         {transaction.type === 'sent' ? (
-                                            <ArrowUpRight className="w-5 h-5 text-red-600" />
+                                            <ArrowUpRight style={{
+                                                ...styles.transactionIconInner,
+                                                ...styles.transactionIconSentColor
+                                            }} />
                                         ) : (
-                                            <ArrowDownLeft className="w-5 h-5 text-green-600" />
+                                            <ArrowDownLeft style={{
+                                                ...styles.transactionIconInner,
+                                                ...styles.transactionIconReceivedColor
+                                            }} />
                                         )}
                                     </div>
 
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <p className="font-medium text-gray-900">
+                                    <div style={styles.transactionDetails}>
+                                        <div style={styles.transactionHeader}>
+                                            <div style={styles.transactionLeft}>
+                                                <p style={styles.transactionName}>
                                                     {transaction.type === 'sent'
                                                         ? `To ${transaction.toName}`
                                                         : `From ${transaction.fromName}`
                                                     }
                                                 </p>
                                                 {transaction.description && (
-                                                    <p className="text-sm text-gray-600 mt-1">{transaction.description}</p>
+                                                    <p style={styles.transactionDescription}>
+                                                        {transaction.description}
+                                                    </p>
                                                 )}
                                             </div>
-                                            <div className="text-right">
-                                                <p className={`font-semibold ${transaction.type === 'sent'
-                                                        ? 'text-red-600'
-                                                        : 'text-green-600'
-                                                    }`}>
+                                            <div style={styles.transactionRight}>
+                                                <p style={{
+                                                    ...styles.transactionAmount,
+                                                    ...(transaction.type === 'sent' ? styles.transactionAmountSent : styles.transactionAmountReceived)
+                                                }}>
                                                     {transaction.type === 'sent' ? '-' : '+'}
                                                     {formatCurrency(transaction.amount)}
                                                 </p>
-                                                <p className="text-xs text-gray-500 mt-1">
+                                                <p style={styles.transactionDate}>
                                                     {formatDate(transaction.timestamp)}
                                                 </p>
                                             </div>

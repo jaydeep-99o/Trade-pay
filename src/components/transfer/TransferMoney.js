@@ -113,31 +113,419 @@ const TransferMoney = () => {
         }).format(amount);
     };
 
+    // Mobile-first inline styles
+    const styles = {
+        container: {
+            maxWidth: '28rem',
+            margin: '0 auto'
+        },
+
+        // Main Card styles
+        mainCard: {
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+            padding: '24px'
+        },
+
+        // Header styles
+        header: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            marginBottom: '24px'
+        },
+        headerIcon: {
+            backgroundColor: '#eff6ff',
+            padding: '12px',
+            borderRadius: '12px'
+        },
+        headerIconInner: {
+            width: '24px',
+            height: '24px',
+            color: '#2563eb'
+        },
+        headerText: {
+            flex: '1'
+        },
+        headerTitle: {
+            fontSize: '20px',
+            fontWeight: '700',
+            color: '#111827',
+            margin: '0 0 4px 0'
+        },
+        headerSubtitle: {
+            color: '#6b7280',
+            fontSize: '14px',
+            margin: '0'
+        },
+
+        // Progress Steps styles
+        progressContainer: {
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: '32px'
+        },
+        progressStep: {
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '14px',
+            fontWeight: '500'
+        },
+        progressStepActive: {
+            backgroundColor: '#2563eb',
+            color: 'white'
+        },
+        progressStepInactive: {
+            backgroundColor: '#e5e7eb',
+            color: '#6b7280'
+        },
+        progressLine: {
+            flex: '1',
+            height: '4px',
+            margin: '0 8px'
+        },
+        progressLineActive: {
+            backgroundColor: '#2563eb'
+        },
+        progressLineInactive: {
+            backgroundColor: '#e5e7eb'
+        },
+
+        // Error Message styles
+        errorContainer: {
+            backgroundColor: '#fef2f2',
+            border: '1px solid #fecaca',
+            borderRadius: '8px',
+            padding: '16px',
+            marginBottom: '24px'
+        },
+        errorContent: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+        },
+        errorIcon: {
+            width: '20px',
+            height: '20px',
+            color: '#ef4444'
+        },
+        errorText: {
+            color: '#dc2626',
+            fontSize: '14px',
+            margin: '0'
+        },
+
+        // Step content container
+        stepContainer: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '24px'
+        },
+
+        // Form elements
+        formGroup: {
+            display: 'flex',
+            flexDirection: 'column'
+        },
+        label: {
+            fontSize: '14px',
+            fontWeight: '500',
+            color: '#374151',
+            marginBottom: '8px',
+            display: 'block'
+        },
+        searchContainer: {
+            display: 'flex',
+            gap: '8px'
+        },
+        inputContainer: {
+            position: 'relative',
+            flex: '1'
+        },
+        searchIcon: {
+            position: 'absolute',
+            left: '12px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            color: '#9ca3af',
+            width: '20px',
+            height: '20px'
+        },
+        input: {
+            width: '100%',
+            padding: '12px 16px',
+            border: '1px solid #e5e7eb',
+            borderRadius: '12px',
+            fontSize: '16px',
+            transition: 'all 0.2s ease',
+            outline: 'none'
+        },
+        inputWithIcon: {
+            paddingLeft: '44px'
+        },
+        inputFocus: {
+            borderColor: '#3b82f6',
+            boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.1)'
+        },
+        
+        // Button styles
+        button: {
+            padding: '12px 24px',
+            borderRadius: '12px',
+            fontSize: '16px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            border: 'none',
+            outline: 'none'
+        },
+        buttonPrimary: {
+            backgroundColor: '#2563eb',
+            color: 'white'
+        },
+        buttonPrimaryHover: {
+            backgroundColor: '#1d4ed8'
+        },
+        buttonSecondary: {
+            backgroundColor: 'transparent',
+            color: '#374151',
+            border: '1px solid #d1d5db'
+        },
+        buttonSecondaryHover: {
+            backgroundColor: '#f9fafb'
+        },
+        buttonSuccess: {
+            backgroundColor: '#16a34a',
+            color: 'white'
+        },
+        buttonSuccessHover: {
+            backgroundColor: '#15803d'
+        },
+        buttonDisabled: {
+            opacity: '0.5',
+            cursor: 'not-allowed'
+        },
+        buttonFlex: {
+            display: 'flex',
+            gap: '12px'
+        },
+        buttonFlexItem: {
+            flex: '1'
+        },
+
+        // Search Results styles
+        searchResultsContainer: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px'
+        },
+        searchResultsTitle: {
+            fontWeight: '500',
+            color: '#111827',
+            fontSize: '16px',
+            margin: '0'
+        },
+        userItem: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '16px',
+            border: '1px solid #e5e7eb',
+            borderRadius: '12px',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease'
+        },
+        userItemHover: {
+            borderColor: '#93c5fd',
+            backgroundColor: '#eff6ff'
+        },
+        userIcon: {
+            backgroundColor: '#f3f4f6',
+            padding: '8px',
+            borderRadius: '8px'
+        },
+        userIconInner: {
+            width: '20px',
+            height: '20px',
+            color: '#6b7280'
+        },
+        userInfo: {
+            flex: '1'
+        },
+        userName: {
+            fontWeight: '500',
+            color: '#111827',
+            fontSize: '16px',
+            margin: '0 0 4px 0'
+        },
+        userEmail: {
+            fontSize: '14px',
+            color: '#6b7280',
+            margin: '0'
+        },
+
+        // Selected User Display styles
+        selectedUserContainer: {
+            backgroundColor: '#f9fafb',
+            padding: '16px',
+            borderRadius: '12px'
+        },
+        selectedUserLabel: {
+            fontSize: '14px',
+            color: '#6b7280',
+            marginBottom: '4px',
+            margin: '0 0 4px 0'
+        },
+        selectedUserInfo: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+        },
+        selectedUserIcon: {
+            backgroundColor: 'white',
+            padding: '8px',
+            borderRadius: '8px'
+        },
+
+        // Amount section styles
+        balanceInfo: {
+            fontSize: '14px',
+            color: '#6b7280',
+            marginTop: '4px',
+            margin: '4px 0 0 0'
+        },
+
+        // Confirmation styles
+        confirmationHeader: {
+            textAlign: 'center'
+        },
+        confirmationTitle: {
+            fontSize: '18px',
+            fontWeight: '600',
+            color: '#111827',
+            margin: '0 0 8px 0'
+        },
+        confirmationSubtitle: {
+            color: '#6b7280',
+            margin: '0'
+        },
+        confirmationDetails: {
+            backgroundColor: '#f9fafb',
+            padding: '24px',
+            borderRadius: '12px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px'
+        },
+        confirmationRow: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+        },
+        confirmationLabel: {
+            color: '#6b7280'
+        },
+        confirmationValue: {
+            textAlign: 'right'
+        },
+        confirmationValuePrimary: {
+            fontWeight: '500',
+            color: '#111827'
+        },
+        confirmationValueAmount: {
+            fontWeight: '700',
+            fontSize: '20px',
+            color: '#111827'
+        },
+        confirmationDivider: {
+            borderTop: '1px solid #e5e7eb',
+            paddingTop: '16px'
+        },
+
+        // Success styles
+        successContainer: {
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '24px'
+        },
+        successIconContainer: {
+            display: 'flex',
+            justifyContent: 'center'
+        },
+        successIconWrapper: {
+            backgroundColor: '#f0fdf4',
+            padding: '24px',
+            borderRadius: '50%'
+        },
+        successIcon: {
+            width: '48px',
+            height: '48px',
+            color: '#16a34a'
+        },
+        successTitle: {
+            fontSize: '20px',
+            fontWeight: '600',
+            color: '#111827',
+            margin: '0 0 8px 0'
+        },
+        successSubtitle: {
+            color: '#6b7280',
+            margin: '0'
+        },
+        balanceUpdateContainer: {
+            backgroundColor: '#f9fafb',
+            padding: '16px',
+            borderRadius: '12px'
+        },
+        balanceUpdateLabel: {
+            fontSize: '14px',
+            color: '#6b7280',
+            marginBottom: '8px',
+            margin: '0 0 8px 0'
+        },
+        balanceUpdateAmount: {
+            fontSize: '32px',
+            fontWeight: '700',
+            color: '#111827',
+            margin: '0'
+        }
+    };
+
     return (
-        <div className="max-w-md mx-auto">
-            <div className="bg-white rounded-2xl shadow-lg p-6">
+        <div style={styles.container}>
+            <div style={styles.mainCard}>
                 {/* Header */}
-                <div className="flex items-center space-x-3 mb-6">
-                    <div className="bg-blue-100 p-3 rounded-xl">
-                        <Send className="w-6 h-6 text-blue-600" />
+                <div style={styles.header}>
+                    <div style={styles.headerIcon}>
+                        <Send style={styles.headerIconInner} />
                     </div>
-                    <div>
-                        <h2 className="text-xl font-bold text-gray-900">Transfer Money</h2>
-                        <p className="text-gray-600 text-sm">Send money to other traders</p>
+                    <div style={styles.headerText}>
+                        <h2 style={styles.headerTitle}>Transfer Money</h2>
+                        <p style={styles.headerSubtitle}>Send money to other traders</p>
                     </div>
                 </div>
 
                 {/* Progress Steps */}
-                <div className="flex items-center mb-8">
+                <div style={styles.progressContainer}>
                     {[1, 2, 3, 4].map((stepNum) => (
                         <React.Fragment key={stepNum}>
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${step >= stepNum ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
-                                }`}>
+                            <div style={{
+                                ...styles.progressStep,
+                                ...(step >= stepNum ? styles.progressStepActive : styles.progressStepInactive)
+                            }}>
                                 {stepNum}
                             </div>
                             {stepNum < 4 && (
-                                <div className={`flex-1 h-1 mx-2 ${step > stepNum ? 'bg-blue-600' : 'bg-gray-200'
-                                    }`} />
+                                <div style={{
+                                    ...styles.progressLine,
+                                    ...(step > stepNum ? styles.progressLineActive : styles.progressLineInactive)
+                                }} />
                             )}
                         </React.Fragment>
                     ))}
@@ -145,37 +533,61 @@ const TransferMoney = () => {
 
                 {/* Error Message */}
                 {error && (
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-                        <div className="flex items-center space-x-2">
-                            <AlertCircle className="w-5 h-5 text-red-500" />
-                            <p className="text-red-600 text-sm">{error}</p>
+                    <div style={styles.errorContainer}>
+                        <div style={styles.errorContent}>
+                            <AlertCircle style={styles.errorIcon} />
+                            <p style={styles.errorText}>{error}</p>
                         </div>
                     </div>
                 )}
 
                 {/* Step 1: Search User */}
                 {step === 1 && (
-                    <div className="space-y-6">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <div style={styles.stepContainer}>
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>
                                 Search by Email or Phone
                             </label>
-                            <div className="flex space-x-2">
-                                <div className="relative flex-1">
-                                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                            <div style={styles.searchContainer}>
+                                <div style={styles.inputContainer}>
+                                    <Search style={styles.searchIcon} />
                                     <input
                                         type="text"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                                        className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        style={{
+                                            ...styles.input,
+                                            ...styles.inputWithIcon
+                                        }}
+                                        onFocus={(e) => {
+                                            Object.assign(e.target.style, styles.inputFocus);
+                                        }}
+                                        onBlur={(e) => {
+                                            e.target.style.borderColor = '#e5e7eb';
+                                            e.target.style.boxShadow = 'none';
+                                        }}
                                         placeholder="Enter email or phone number"
                                     />
                                 </div>
                                 <button
                                     onClick={handleSearch}
                                     disabled={isLoading || !searchTerm.trim()}
-                                    className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    style={{
+                                        ...styles.button,
+                                        ...styles.buttonPrimary,
+                                        ...(isLoading || !searchTerm.trim() ? styles.buttonDisabled : {})
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        if (!isLoading && searchTerm.trim()) {
+                                            Object.assign(e.target.style, styles.buttonPrimaryHover);
+                                        }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        if (!isLoading && searchTerm.trim()) {
+                                            e.target.style.backgroundColor = '#2563eb';
+                                        }
+                                    }}
                                 >
                                     {isLoading ? 'Searching...' : 'Search'}
                                 </button>
@@ -184,22 +596,29 @@ const TransferMoney = () => {
 
                         {/* Search Results */}
                         {searchResults.length > 0 && (
-                            <div className="space-y-3">
-                                <h3 className="font-medium text-gray-900">Search Results</h3>
+                            <div style={styles.searchResultsContainer}>
+                                <h3 style={styles.searchResultsTitle}>Search Results</h3>
                                 {searchResults.map((user) => (
                                     <div
                                         key={user.uid}
                                         onClick={() => selectUser(user)}
-                                        className="flex items-center space-x-3 p-4 border border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 cursor-pointer transition-colors"
+                                        style={styles.userItem}
+                                        onMouseEnter={(e) => {
+                                            Object.assign(e.currentTarget.style, styles.userItemHover);
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.borderColor = '#e5e7eb';
+                                            e.currentTarget.style.backgroundColor = 'white';
+                                        }}
                                     >
-                                        <div className="bg-gray-100 p-2 rounded-lg">
-                                            <User className="w-5 h-5 text-gray-600" />
+                                        <div style={styles.userIcon}>
+                                            <User style={styles.userIconInner} />
                                         </div>
-                                        <div className="flex-1">
-                                            <p className="font-medium text-gray-900">{user.name}</p>
-                                            <p className="text-sm text-gray-600">{user.email}</p>
+                                        <div style={styles.userInfo}>
+                                            <p style={styles.userName}>{user.name}</p>
+                                            <p style={styles.userEmail}>{user.email}</p>
                                             {user.phone && (
-                                                <p className="text-sm text-gray-600">{user.phone}</p>
+                                                <p style={styles.userEmail}>{user.phone}</p>
                                             )}
                                         </div>
                                     </div>
@@ -211,61 +630,95 @@ const TransferMoney = () => {
 
                 {/* Step 2: Enter Amount */}
                 {step === 2 && (
-                    <div className="space-y-6">
-                        <div className="bg-gray-50 p-4 rounded-xl">
-                            <p className="text-sm text-gray-600 mb-1">Sending to</p>
-                            <div className="flex items-center space-x-3">
-                                <div className="bg-white p-2 rounded-lg">
-                                    <User className="w-5 h-5 text-gray-600" />
+                    <div style={styles.stepContainer}>
+                        <div style={styles.selectedUserContainer}>
+                            <p style={styles.selectedUserLabel}>Sending to</p>
+                            <div style={styles.selectedUserInfo}>
+                                <div style={styles.selectedUserIcon}>
+                                    <User style={styles.userIconInner} />
                                 </div>
                                 <div>
-                                    <p className="font-medium text-gray-900">{selectedUser.name}</p>
-                                    <p className="text-sm text-gray-600">{selectedUser.email}</p>
+                                    <p style={styles.userName}>{selectedUser.name}</p>
+                                    <p style={styles.userEmail}>{selectedUser.email}</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>
                                 Amount (₹)
                             </label>
                             <input
                                 type="number"
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                style={styles.input}
+                                onFocus={(e) => {
+                                    Object.assign(e.target.style, styles.inputFocus);
+                                }}
+                                onBlur={(e) => {
+                                    e.target.style.borderColor = '#e5e7eb';
+                                    e.target.style.boxShadow = 'none';
+                                }}
                                 placeholder="Enter amount"
                                 min="1"
                                 max={userData.balance}
                             />
-                            <p className="text-sm text-gray-600 mt-1">
+                            <p style={styles.balanceInfo}>
                                 Available balance: {formatCurrency(userData.balance)}
                             </p>
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <div style={styles.formGroup}>
+                            <label style={styles.label}>
                                 Description (Optional)
                             </label>
                             <input
                                 type="text"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
-                                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                style={styles.input}
+                                onFocus={(e) => {
+                                    Object.assign(e.target.style, styles.inputFocus);
+                                }}
+                                onBlur={(e) => {
+                                    e.target.style.borderColor = '#e5e7eb';
+                                    e.target.style.boxShadow = 'none';
+                                }}
                                 placeholder="What's this for?"
                             />
                         </div>
 
-                        <div className="flex space-x-3">
+                        <div style={styles.buttonFlex}>
                             <button
                                 onClick={() => setStep(1)}
-                                className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors"
+                                style={{
+                                    ...styles.button,
+                                    ...styles.buttonSecondary,
+                                    ...styles.buttonFlexItem
+                                }}
+                                onMouseEnter={(e) => {
+                                    Object.assign(e.target.style, styles.buttonSecondaryHover);
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.target.style.backgroundColor = 'transparent';
+                                }}
                             >
                                 Back
                             </button>
                             <button
                                 onClick={proceedToConfirm}
-                                className="flex-1 py-3 px-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
+                                style={{
+                                    ...styles.button,
+                                    ...styles.buttonPrimary,
+                                    ...styles.buttonFlexItem
+                                }}
+                                onMouseEnter={(e) => {
+                                    Object.assign(e.target.style, styles.buttonPrimaryHover);
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.target.style.backgroundColor = '#2563eb';
+                                }}
                             >
                                 Continue
                             </button>
@@ -275,54 +728,85 @@ const TransferMoney = () => {
 
                 {/* Step 3: Confirm Transfer */}
                 {step === 3 && (
-                    <div className="space-y-6">
-                        <div className="text-center">
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">Confirm Transfer</h3>
-                            <p className="text-gray-600">Please review the details below</p>
+                    <div style={styles.stepContainer}>
+                        <div style={styles.confirmationHeader}>
+                            <h3 style={styles.confirmationTitle}>Confirm Transfer</h3>
+                            <p style={styles.confirmationSubtitle}>Please review the details below</p>
                         </div>
 
-                        <div className="bg-gray-50 p-6 rounded-xl space-y-4">
-                            <div className="flex justify-between items-center">
-                                <span className="text-gray-600">To</span>
-                                <div className="text-right">
-                                    <p className="font-medium text-gray-900">{selectedUser.name}</p>
-                                    <p className="text-sm text-gray-600">{selectedUser.email}</p>
+                        <div style={styles.confirmationDetails}>
+                            <div style={styles.confirmationRow}>
+                                <span style={styles.confirmationLabel}>To</span>
+                                <div style={styles.confirmationValue}>
+                                    <p style={styles.confirmationValuePrimary}>{selectedUser.name}</p>
+                                    <p style={styles.userEmail}>{selectedUser.email}</p>
                                 </div>
                             </div>
 
-                            <div className="flex justify-between items-center">
-                                <span className="text-gray-600">Amount</span>
-                                <span className="font-bold text-xl text-gray-900">{formatCurrency(parseFloat(amount))}</span>
+                            <div style={styles.confirmationRow}>
+                                <span style={styles.confirmationLabel}>Amount</span>
+                                <span style={{
+                                    ...styles.confirmationValue,
+                                    ...styles.confirmationValueAmount
+                                }}>
+                                    {formatCurrency(parseFloat(amount))}
+                                </span>
                             </div>
 
                             {description && (
-                                <div className="flex justify-between items-center">
-                                    <span className="text-gray-600">Description</span>
-                                    <span className="text-gray-900">{description}</span>
+                                <div style={styles.confirmationRow}>
+                                    <span style={styles.confirmationLabel}>Description</span>
+                                    <span style={styles.confirmationValuePrimary}>{description}</span>
                                 </div>
                             )}
 
-                            <div className="border-t pt-4">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-gray-600">Remaining Balance</span>
-                                    <span className="font-medium text-gray-900">
-                                        {formatCurrency(userData.balance - parseFloat(amount))}
-                                    </span>
-                                </div>
+                            <div style={{
+                                ...styles.confirmationRow,
+                                ...styles.confirmationDivider
+                            }}>
+                                <span style={styles.confirmationLabel}>Remaining Balance</span>
+                                <span style={styles.confirmationValuePrimary}>
+                                    {formatCurrency(userData.balance - parseFloat(amount))}
+                                </span>
                             </div>
                         </div>
 
-                        <div className="flex space-x-3">
+                        <div style={styles.buttonFlex}>
                             <button
                                 onClick={() => setStep(2)}
-                                className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors"
+                                style={{
+                                    ...styles.button,
+                                    ...styles.buttonSecondary,
+                                    ...styles.buttonFlexItem
+                                }}
+                                onMouseEnter={(e) => {
+                                    Object.assign(e.target.style, styles.buttonSecondaryHover);
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.target.style.backgroundColor = 'transparent';
+                                }}
                             >
                                 Back
                             </button>
                             <button
                                 onClick={confirmTransfer}
                                 disabled={isLoading}
-                                className="flex-1 py-3 px-4 bg-green-600 text-white rounded-xl hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                style={{
+                                    ...styles.button,
+                                    ...styles.buttonSuccess,
+                                    ...styles.buttonFlexItem,
+                                    ...(isLoading ? styles.buttonDisabled : {})
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (!isLoading) {
+                                        Object.assign(e.target.style, styles.buttonSuccessHover);
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (!isLoading) {
+                                        e.target.style.backgroundColor = '#16a34a';
+                                    }
+                                }}
                             >
                                 {isLoading ? 'Processing...' : 'Confirm & Send'}
                             </button>
@@ -332,28 +816,38 @@ const TransferMoney = () => {
 
                 {/* Step 4: Success */}
                 {step === 4 && success && (
-                    <div className="text-center space-y-6">
-                        <div className="flex justify-center">
-                            <div className="bg-green-100 p-6 rounded-full">
-                                <CheckCircle className="w-12 h-12 text-green-600" />
+                    <div style={styles.successContainer}>
+                        <div style={styles.successIconContainer}>
+                            <div style={styles.successIconWrapper}>
+                                <CheckCircle style={styles.successIcon} />
                             </div>
                         </div>
 
                         <div>
-                            <h3 className="text-xl font-semibold text-gray-900 mb-2">Transfer Successful!</h3>
-                            <p className="text-gray-600">
+                            <h3 style={styles.successTitle}>Transfer Successful!</h3>
+                            <p style={styles.successSubtitle}>
                                 {formatCurrency(parseFloat(amount))} sent to {selectedUser.name}
                             </p>
                         </div>
 
-                        <div className="bg-gray-50 p-4 rounded-xl">
-                            <p className="text-sm text-gray-600 mb-2">Updated Balance</p>
-                            <p className="text-2xl font-bold text-gray-900">{formatCurrency(userData.balance)}</p>
+                        <div style={styles.balanceUpdateContainer}>
+                            <p style={styles.balanceUpdateLabel}>Updated Balance</p>
+                            <p style={styles.balanceUpdateAmount}>{formatCurrency(userData.balance)}</p>
                         </div>
 
                         <button
                             onClick={resetTransfer}
-                            className="w-full py-3 px-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
+                            style={{
+                                ...styles.button,
+                                ...styles.buttonPrimary,
+                                width: '100%'
+                            }}
+                            onMouseEnter={(e) => {
+                                Object.assign(e.target.style, styles.buttonPrimaryHover);
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = '#2563eb';
+                            }}
                         >
                             Send Another Transfer
                         </button>
@@ -365,5 +859,3 @@ const TransferMoney = () => {
 };
 
 export default TransferMoney;
-
-// src/components/dashboard/TransactionHistory.js

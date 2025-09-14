@@ -22,14 +22,12 @@ const LoginRegister = () => {
             ...prev,
             [name]: value
         }));
-        // Clear error when user starts typing
         if (errors[name]) {
             setErrors(prev => ({
                 ...prev,
                 [name]: ''
             }));
         }
-        // Clear general error
         if (errors.general) {
             setErrors(prev => ({
                 ...prev,
@@ -89,7 +87,6 @@ const LoginRegister = () => {
             if (!result.success) {
                 setErrors({ general: result.error });
             }
-            // Success case will be handled by AuthContext
         } catch (error) {
             setErrors({ general: 'Something went wrong. Please try again.' });
         }
@@ -109,194 +106,400 @@ const LoginRegister = () => {
         setErrors({});
     };
 
+    // Styles object
+    const styles = {
+        container: {
+            minHeight: '100vh',
+            background: 'linear-gradient(135deg, #dbeafe 0%, #ffffff 50%, #faf5ff 100%)',
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            padding: '16px 12px'
+        },
+        wrapper: {
+            width: '100%',
+            maxWidth: '384px'
+        },
+        header: {
+            textAlign: 'center',
+            marginBottom: '24px'
+        },
+        logo: {
+            background: 'linear-gradient(135deg, #2563eb, #7c3aed)',
+            width: '56px',
+            height: '56px',
+            borderRadius: '16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 12px',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)'
+        },
+        logoIcon: {
+            width: '28px',
+            height: '28px',
+            color: 'white'
+        },
+        title: {
+            fontSize: '24px',
+            fontWeight: '700',
+            color: '#111827',
+            margin: '0 0 4px 0'
+        },
+        subtitle: {
+            fontSize: '14px',
+            color: '#6b7280',
+            margin: '0'
+        },
+        toggleContainer: {
+            display: 'flex',
+            backgroundColor: '#f3f4f6',
+            borderRadius: '12px',
+            padding: '4px',
+            marginBottom: '20px'
+        },
+        toggleButton: {
+            flex: '1',
+            padding: '12px 16px',
+            borderRadius: '8px',
+            fontWeight: '500',
+            fontSize: '14px',
+            border: 'none',
+            background: 'none',
+            color: '#6b7280',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            minHeight: '48px'
+        },
+        toggleActive: {
+            backgroundColor: 'white',
+            color: '#2563eb',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+        },
+        formCard: {
+            background: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 25px 50px rgba(0, 0, 0, 0.1)',
+            padding: '20px',
+            border: '1px solid #f3f4f6'
+        },
+        form: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px'
+        },
+        inputGroup: {
+            display: 'flex',
+            flexDirection: 'column'
+        },
+        label: {
+            fontSize: '14px',
+            fontWeight: '500',
+            color: '#374151',
+            marginBottom: '8px'
+        },
+        inputWrapper: {
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center'
+        },
+        inputIcon: {
+            position: 'absolute',
+            left: '12px',
+            width: '20px',
+            height: '20px',
+            color: '#9ca3af',
+            zIndex: '1'
+        },
+        input: {
+            width: '100%',
+            padding: '16px 12px 16px 44px',
+            fontSize: '16px',
+            border: '1px solid #d1d5db',
+            borderRadius: '12px',
+            backgroundColor: 'white',
+            transition: 'all 0.2s ease',
+            outline: 'none'
+        },
+        inputError: {
+            borderColor: '#ef4444',
+            backgroundColor: '#fef2f2'
+        },
+        passwordInput: {
+            paddingRight: '56px'
+        },
+        passwordToggle: {
+            position: 'absolute',
+            right: '12px',
+            padding: '12px',
+            border: 'none',
+            background: 'none',
+            color: '#9ca3af',
+            cursor: 'pointer',
+            borderRadius: '8px',
+            transition: 'color 0.2s ease',
+            minHeight: '44px',
+            minWidth: '44px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        },
+        errorAlert: {
+            backgroundColor: '#fef2f2',
+            border: '1px solid #fecaca',
+            borderRadius: '8px',
+            padding: '12px',
+            marginBottom: '20px'
+        },
+        errorText: {
+            color: '#ef4444',
+            fontSize: '12px',
+            margin: '4px 0 0 4px'
+        },
+        submitButton: {
+            width: '100%',
+            background: 'linear-gradient(135deg, #2563eb, #7c3aed)',
+            color: 'white',
+            fontWeight: '600',
+            fontSize: '16px',
+            padding: '16px',
+            border: 'none',
+            borderRadius: '12px',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            minHeight: '56px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)'
+        },
+        spinner: {
+            width: '20px',
+            height: '20px',
+            animation: 'spin 1s linear infinite'
+        },
+        toggleLink: {
+            textAlign: 'center',
+            marginTop: '20px'
+        },
+        linkButton: {
+            color: '#2563eb',
+            fontWeight: '500',
+            fontSize: '14px',
+            border: 'none',
+            background: 'none',
+            cursor: 'pointer',
+            padding: '8px 16px',
+            borderRadius: '8px',
+            transition: 'color 0.2s ease',
+            minHeight: '44px'
+        },
+        footer: {
+            textAlign: 'center',
+            marginTop: '16px',
+            padding: '0 8px',
+            fontSize: '12px',
+            color: '#9ca3af'
+        }
+    };
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center px-4 py-8">
-            <div className="w-full max-w-md">
+        <div style={styles.container}>
+            <div style={styles.wrapper}>
                 {/* Header */}
-                <div className="text-center mb-8">
-                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                        <Shield className="w-8 h-8 text-white" />
+                <div style={styles.header}>
+                    <div style={styles.logo}>
+                        <Shield style={styles.logoIcon} />
                     </div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">TradePay</h1>
-                    <p className="text-gray-600">Digital payments for trading expo</p>
+                    <h1 style={styles.title}>TradePay</h1>
+                    <p style={styles.subtitle}>Digital payments for trading expo</p>
                 </div>
 
                 {/* Toggle Buttons */}
-                <div className="flex bg-gray-100 rounded-xl p-1 mb-6">
+                <div style={styles.toggleContainer}>
                     <button
                         onClick={() => setIsLogin(true)}
                         disabled={isLoading}
-                        className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all ${isLogin
-                                ? 'bg-white text-blue-600 shadow-sm'
-                                : 'text-gray-600 hover:text-gray-900'
-                            }`}
+                        style={{
+                            ...styles.toggleButton,
+                            ...(isLogin ? styles.toggleActive : {})
+                        }}
                     >
                         Login
                     </button>
                     <button
                         onClick={() => setIsLogin(false)}
                         disabled={isLoading}
-                        className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all ${!isLogin
-                                ? 'bg-white text-blue-600 shadow-sm'
-                                : 'text-gray-600 hover:text-gray-900'
-                            }`}
+                        style={{
+                            ...styles.toggleButton,
+                            ...(!isLogin ? styles.toggleActive : {})
+                        }}
                     >
                         Register
                     </button>
                 </div>
 
                 {/* Form Card */}
-                <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+                <div style={styles.formCard}>
                     {/* General Error */}
                     {errors.general && (
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-                            <p className="text-red-600 text-sm">{errors.general}</p>
+                        <div style={styles.errorAlert}>
+                            <p style={{ color: '#dc2626', fontSize: '14px', margin: '0' }}>
+                                {errors.general}
+                            </p>
                         </div>
                     )}
 
-                    <div className="space-y-5">
-                        {/* Name Field (Register only) */}
+                    <form onSubmit={handleSubmit} style={styles.form}>
+                        {/* Name Field */}
                         {!isLogin && (
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Full Name
-                                </label>
-                                <div className="relative">
-                                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                            <div style={styles.inputGroup}>
+                                <label style={styles.label}>Full Name</label>
+                                <div style={styles.inputWrapper}>
+                                    <User style={styles.inputIcon} />
                                     <input
                                         type="text"
                                         name="name"
                                         value={formData.name}
                                         onChange={handleInputChange}
                                         disabled={isLoading}
-                                        className={`w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed ${errors.name ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
-                                            }`}
+                                        style={{
+                                            ...styles.input,
+                                            ...(errors.name ? styles.inputError : {})
+                                        }}
                                         placeholder="Enter your full name"
+                                        autoComplete="name"
                                     />
                                 </div>
-                                {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                                {errors.name && <p style={styles.errorText}>{errors.name}</p>}
                             </div>
                         )}
 
                         {/* Email Field */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Email Address
-                            </label>
-                            <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Email Address</label>
+                            <div style={styles.inputWrapper}>
+                                <Mail style={styles.inputIcon} />
                                 <input
                                     type="email"
                                     name="email"
                                     value={formData.email}
                                     onChange={handleInputChange}
                                     disabled={isLoading}
-                                    className={`w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed ${errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
-                                        }`}
+                                    style={{
+                                        ...styles.input,
+                                        ...(errors.email ? styles.inputError : {})
+                                    }}
                                     placeholder="Enter your email"
+                                    autoComplete="email"
                                 />
                             </div>
-                            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                            {errors.email && <p style={styles.errorText}>{errors.email}</p>}
                         </div>
 
-                        {/* Phone Field (Register only) */}
+                        {/* Phone Field */}
                         {!isLogin && (
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Phone Number
-                                </label>
-                                <div className="relative">
-                                    <Smartphone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                            <div style={styles.inputGroup}>
+                                <label style={styles.label}>Phone Number</label>
+                                <div style={styles.inputWrapper}>
+                                    <Smartphone style={styles.inputIcon} />
                                     <input
                                         type="tel"
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleInputChange}
                                         disabled={isLoading}
-                                        className={`w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed ${errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
-                                            }`}
+                                        style={{
+                                            ...styles.input,
+                                            ...(errors.phone ? styles.inputError : {})
+                                        }}
                                         placeholder="Enter your phone number"
+                                        autoComplete="tel"
                                     />
                                 </div>
-                                {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+                                {errors.phone && <p style={styles.errorText}>{errors.phone}</p>}
                             </div>
                         )}
 
                         {/* Password Field */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Password
-                            </label>
-                            <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <div style={styles.inputGroup}>
+                            <label style={styles.label}>Password</label>
+                            <div style={styles.inputWrapper}>
+                                <Lock style={styles.inputIcon} />
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     name="password"
                                     value={formData.password}
                                     onChange={handleInputChange}
                                     disabled={isLoading}
-                                    className={`w-full pl-11 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed ${errors.password ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
-                                        }`}
+                                    style={{
+                                        ...styles.input,
+                                        ...styles.passwordInput,
+                                        ...(errors.password ? styles.inputError : {})
+                                    }}
                                     placeholder="Enter your password"
+                                    autoComplete={isLogin ? "current-password" : "new-password"}
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
                                     disabled={isLoading}
-                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    style={styles.passwordToggle}
                                 >
-                                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    {showPassword ? <EyeOff /> : <Eye />}
                                 </button>
                             </div>
-                            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+                            {errors.password && <p style={styles.errorText}>{errors.password}</p>}
                         </div>
 
-                        {/* Confirm Password (Register only) */}
+                        {/* Confirm Password */}
                         {!isLogin && (
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Confirm Password
-                                </label>
-                                <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                            <div style={styles.inputGroup}>
+                                <label style={styles.label}>Confirm Password</label>
+                                <div style={styles.inputWrapper}>
+                                    <Lock style={styles.inputIcon} />
                                     <input
                                         type={showPassword ? 'text' : 'password'}
                                         name="confirmPassword"
                                         value={formData.confirmPassword}
                                         onChange={handleInputChange}
                                         disabled={isLoading}
-                                        className={`w-full pl-11 pr-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed ${errors.confirmPassword ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
-                                            }`}
+                                        style={{
+                                            ...styles.input,
+                                            ...(errors.confirmPassword ? styles.inputError : {})
+                                        }}
                                         placeholder="Confirm your password"
+                                        autoComplete="new-password"
                                     />
                                 </div>
-                                {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
+                                {errors.confirmPassword && <p style={styles.errorText}>{errors.confirmPassword}</p>}
                             </div>
                         )}
 
                         {/* Submit Button */}
                         <button
-                            onClick={handleSubmit}
+                            type="submit"
                             disabled={isLoading}
-                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center"
+                            style={styles.submitButton}
                         >
                             {isLoading ? (
                                 <>
-                                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                                    <Loader2 style={styles.spinner} />
                                     {isLogin ? 'Signing In...' : 'Creating Account...'}
                                 </>
                             ) : (
                                 isLogin ? 'Login to TradePay' : 'Create Account'
                             )}
                         </button>
-                    </div>
+                    </form>
 
-                    {/* Additional Options */}
-                    <div className="mt-6 text-center">
+                    {/* Toggle Link */}
+                    <div style={styles.toggleLink}>
                         <button
                             onClick={toggleMode}
                             disabled={isLoading}
-                            className="text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            style={styles.linkButton}
                         >
                             {isLogin
                                 ? "Don't have an account? Register here"
@@ -307,7 +510,7 @@ const LoginRegister = () => {
                 </div>
 
                 {/* Footer */}
-                <div className="text-center mt-6 text-sm text-gray-500">
+                <div style={styles.footer}>
                     <p>Secure digital payments • Trading Expo 2024</p>
                 </div>
             </div>

@@ -42,39 +42,216 @@ const Dashboard = () => {
         }
     };
 
+    // Styles object for mobile-first design
+    const styles = {
+        container: {
+            minHeight: '100vh',
+            backgroundColor: '#f9fafb'
+        },
+        wrapper: {
+            maxWidth: '1280px',
+            margin: '0 auto',
+            padding: '16px',
+            paddingTop: '32px',
+            '@media (min-width: 640px)': {
+                padding: '24px',
+                paddingTop: '32px'
+            },
+            '@media (min-width: 1024px)': {
+                padding: '32px',
+                paddingTop: '32px'
+            }
+        },
+        navigationContainer: {
+            display: 'flex',
+            gap: '4px',
+            marginBottom: '24px',
+            backgroundColor: 'white',
+            padding: '6px',
+            borderRadius: '12px',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+            // Mobile: Stack vertically on very small screens
+            flexDirection: 'row',
+            overflowX: 'auto',
+            // Hide scrollbar
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none'
+        },
+        navigationButton: {
+            flex: '1',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            padding: '12px 8px',
+            borderRadius: '8px',
+            fontWeight: '500',
+            fontSize: '14px',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            minHeight: '48px', // Touch-friendly
+            minWidth: '60px', // Prevent too narrow buttons
+            whiteSpace: 'nowrap'
+        },
+        navigationButtonActive: {
+            backgroundColor: '#2563eb',
+            color: 'white',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+        },
+        navigationButtonInactive: {
+            color: '#6b7280',
+            backgroundColor: 'transparent'
+        },
+        navigationButtonInactiveHover: {
+            color: '#111827',
+            backgroundColor: '#f9fafb'
+        },
+        navigationIcon: {
+            width: '20px',
+            height: '20px'
+        },
+        navigationText: {
+            display: 'none'
+        },
+        navigationTextVisible: {
+            display: 'inline'
+        },
+        content: {
+            transition: 'all 0.3s ease-in-out'
+        },
+        // Mobile-specific navigation styles
+        navigationMobile: {
+            position: 'fixed',
+            bottom: '0',
+            left: '0',
+            right: '0',
+            backgroundColor: 'white',
+            padding: '8px 12px 24px 12px', // Extra bottom padding for safe area
+            borderTop: '1px solid #e5e7eb',
+            boxShadow: '0 -4px 6px rgba(0, 0, 0, 0.05)',
+            zIndex: '50'
+        },
+        navigationMobileButton: {
+            flex: '1',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '4px',
+            padding: '8px 4px',
+            borderRadius: '8px',
+            border: 'none',
+            backgroundColor: 'transparent',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            minHeight: '56px'
+        },
+        navigationMobileText: {
+            fontSize: '11px',
+            fontWeight: '500',
+            lineHeight: '1'
+        },
+        contentWithBottomNav: {
+            paddingBottom: '100px' // Space for bottom navigation
+        }
+    };
+
+    // Check if mobile (simple approach)
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+    
+    React.useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 640);
+        };
+        
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div style={styles.container}>
             <Header />
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                {/* Navigation Tabs */}
-                <div className="flex space-x-1 mb-8 bg-white p-1 rounded-xl shadow-sm">
-                    {navigationItems.map((item) => {
-                        const Icon = item.icon;
-                        return (
-                            <button
-                                key={item.id}
-                                onClick={() => setActiveTab(item.id)}
-                                className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-lg font-medium transition-all ${activeTab === item.id
-                                        ? 'bg-blue-600 text-white shadow-sm'
-                                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                                    }`}
-                            >
-                                <Icon className="w-5 h-5" />
-                                <span className="hidden sm:inline">{item.label}</span>
-                            </button>
-                        );
-                    })}
-                </div>
+            <div style={styles.wrapper}>
+                {/* Desktop Navigation Tabs */}
+                {!isMobile && (
+                    <div style={styles.navigationContainer}>
+                        {navigationItems.map((item) => {
+                            const Icon = item.icon;
+                            const isActive = activeTab === item.id;
+                            return (
+                                <button
+                                    key={item.id}
+                                    onClick={() => setActiveTab(item.id)}
+                                    style={{
+                                        ...styles.navigationButton,
+                                        ...(isActive ? styles.navigationButtonActive : styles.navigationButtonInactive)
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        if (!isActive) {
+                                            e.target.style.color = styles.navigationButtonInactiveHover.color;
+                                            e.target.style.backgroundColor = styles.navigationButtonInactiveHover.backgroundColor;
+                                        }
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        if (!isActive) {
+                                            e.target.style.color = styles.navigationButtonInactive.color;
+                                            e.target.style.backgroundColor = styles.navigationButtonInactive.backgroundColor;
+                                        }
+                                    }}
+                                >
+                                    <Icon style={styles.navigationIcon} />
+                                    <span style={window.innerWidth >= 640 ? styles.navigationTextVisible : styles.navigationText}>
+                                        {item.label}
+                                    </span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
 
                 {/* Content */}
-                <div className="transition-all duration-300">
+                <div style={isMobile ? styles.contentWithBottomNav : styles.content}>
                     {renderContent()}
                 </div>
             </div>
+
+            {/* Mobile Bottom Navigation */}
+            {isMobile && (
+                <div style={styles.navigationMobile}>
+                    <div style={{ display: 'flex', gap: '4px' }}>
+                        {navigationItems.map((item) => {
+                            const Icon = item.icon;
+                            const isActive = activeTab === item.id;
+                            return (
+                                <button
+                                    key={item.id}
+                                    onClick={() => setActiveTab(item.id)}
+                                    style={{
+                                        ...styles.navigationMobileButton,
+                                        color: isActive ? '#2563eb' : '#6b7280'
+                                    }}
+                                >
+                                    <Icon style={{
+                                        width: '24px',
+                                        height: '24px',
+                                        color: isActive ? '#2563eb' : '#6b7280'
+                                    }} />
+                                    <span style={{
+                                        ...styles.navigationMobileText,
+                                        color: isActive ? '#2563eb' : '#6b7280'
+                                    }}>
+                                        {item.label}
+                                    </span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
 export default Dashboard;
-
