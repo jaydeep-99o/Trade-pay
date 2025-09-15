@@ -21,13 +21,58 @@ const TransactionHistory = () => {
     }, [userData]);
 
     const loadTransactions = async () => {
-        setLoading(true);
-        const result = await getUserTransactions(userData.uid);
-        if (result.success) {
-            setTransactions(result.transactions);
+        console.log('🔍 Starting to load transactions...');
+        console.log('👤 Current userData:', userData);
+        
+        if (!userData?.uid) {
+            console.error('❌ No userData.uid available');
+            setLoading(false);
+            return;
         }
+        
+        setLoading(true);
+        
+        try {
+            console.log('🚀 Calling getUserTransactions with UID:', userData.uid);
+            const result = await getUserTransactions(userData.uid);
+            
+            console.log('📦 getUserTransactions full result:', result);
+            console.log('✅ Success status:', result.success);
+            
+            if (result.success) {
+                console.log('📊 Transactions array:', result.transactions);
+                console.log('📈 Number of transactions:', result.transactions?.length || 0);
+                
+                // Log each transaction individually
+                result.transactions?.forEach((transaction, index) => {
+                    console.log(`📄 Transaction ${index + 1}:`, transaction);
+                    console.log(`   - ID: ${transaction.id}`);
+                    console.log(`   - Type: ${transaction.type}`);
+                    console.log(`   - Amount: ${transaction.amount}`);
+                    console.log(`   - From: ${transaction.fromName} (${transaction.fromUid})`);
+                    console.log(`   - To: ${transaction.toName} (${transaction.toUid})`);
+                    console.log(`   - Timestamp:`, transaction.timestamp);
+                });
+                
+                setTransactions(result.transactions || []);
+            } else {
+                console.error('❌ Failed to load transactions:', result.error);
+                setTransactions([]);
+            }
+        } catch (error) {
+            console.error('💥 Error in loadTransactions:', error);
+            setTransactions([]);
+        }
+        
         setLoading(false);
     };
+
+    // Add this useEffect to log when transactions state changes
+    useEffect(() => {
+        console.log('🔄 Transactions state updated:', transactions);
+        console.log('📊 Current filter:', filter);
+        console.log('📋 Filtered transactions length:', filteredTransactions.length);
+    }, [transactions, filter]);
 
     const filteredTransactions = transactions.filter(transaction => {
         if (filter === 'sent') return transaction.type === 'sent';

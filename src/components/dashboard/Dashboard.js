@@ -17,6 +17,7 @@ import {
 const Dashboard = () => {
     const [activeTab, setActiveTab] = useState('home');
     const { userData } = useAuth();
+  
 
     const isAdmin = userData?.email === 'admin@tradepay.com'; // Simple admin check
 

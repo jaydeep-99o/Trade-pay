@@ -7,6 +7,7 @@ import {
     collection,
     query,
     where,
+    or,
     orderBy,
     getDocs,
     addDoc,
@@ -118,6 +119,8 @@ export const transferMoney = async (fromUid, toUid, amount, description = '') =>
 };
 
 // Get user transactions
+
+
 export const getUserTransactions = async (uid) => {
     try {
         const q = query(
@@ -157,7 +160,6 @@ export const getUserTransactions = async (uid) => {
         return { success: false, error: error.message };
     }
 };
-
 // Search users by email or phone
 export const searchUsers = async (searchTerm) => {
     try {
