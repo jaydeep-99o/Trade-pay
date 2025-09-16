@@ -1,7 +1,7 @@
 // src/components/dashboard/Wallet.js
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { getUserData } from '../../firebase/firestore';
+import { getUserData, getUserTransactions } from '../../firebase/firestore';
 import {
     Wallet as WalletIcon,
     TrendingUp,
@@ -15,6 +15,77 @@ const Wallet = () => {
     const { userData, setUserData } = useAuth();
     const [showBalance, setShowBalance] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [transactions, setTransactions] = useState([]);
+    const [transactionStats, setTransactionStats] = useState({
+        moneyReceived: 0,
+        moneySent: 0,
+        totalTransactions: 0
+    });
+    const [isLoadingTransactions, setIsLoadingTransactions] = useState(true);
+
+    // Fetch transactions on component mount and when userData changes
+    useEffect(() => {
+        if (userData?.uid) {
+            fetchTransactions();
+        }
+    }, [userData?.uid]);
+
+    const fetchTransactions = async () => {
+        if (!userData?.uid) return;
+        
+        setIsLoadingTransactions(true);
+        try {
+            const result = await getUserTransactions(userData.uid);
+            if (result.success) {
+                setTransactions(result.transactions);
+                calculateTransactionStats(result.transactions);
+            }
+        } catch (error) {
+            console.error('Error fetching transactions:', error);
+        } finally {
+            setIsLoadingTransactions(false);
+        }
+    };
+
+    const calculateTransactionStats = (transactionList) => {
+        const currentMonth = new Date().getMonth();
+        const currentYear = new Date().getFullYear();
+
+        let moneyReceived = 0;
+        let moneySent = 0;
+        let thisMonthReceived = 0;
+        let thisMonthSent = 0;
+        
+        transactionList.forEach(transaction => {
+            const transactionDate = transaction.timestamp?.toDate ? 
+                transaction.timestamp.toDate() : 
+                new Date(transaction.timestamp);
+            
+            const amount = transaction.amount || 0;
+            
+            // Check if transaction is from current month
+            const isCurrentMonth = transactionDate.getMonth() === currentMonth && 
+                                 transactionDate.getFullYear() === currentYear;
+            
+            if (transaction.type === 'received' || transaction.toUid === userData.uid) {
+                moneyReceived += amount;
+                if (isCurrentMonth) {
+                    thisMonthReceived += amount;
+                }
+            } else if (transaction.type === 'sent' || transaction.fromUid === userData.uid) {
+                moneySent += amount;
+                if (isCurrentMonth) {
+                    thisMonthSent += amount;
+                }
+            }
+        });
+
+        setTransactionStats({
+            moneyReceived: thisMonthReceived,
+            moneySent: thisMonthSent,
+            totalTransactions: transactionList.length
+        });
+    };
 
     const refreshBalance = async () => {
         setIsRefreshing(true);
@@ -22,6 +93,8 @@ const Wallet = () => {
         if (freshUserData) {
             setUserData(freshUserData);
         }
+        // Also refresh transactions
+        await fetchTransactions();
         setTimeout(() => setIsRefreshing(false), 1000);
     };
 
@@ -143,10 +216,7 @@ const Wallet = () => {
         quickActionsGrid: {
             display: 'grid',
             gridTemplateColumns: '1fr',
-            gap: '16px',
-            '@media (min-width: 768px)': {
-                gridTemplateColumns: 'repeat(3, 1fr)'
-            }
+            gap: '16px'
         },
         quickActionCard: {
             backgroundColor: 'white',
@@ -212,6 +282,11 @@ const Wallet = () => {
         quickActionSubtitleBlue: {
             color: '#2563eb'
         },
+        loadingText: {
+            fontSize: '20px',
+            color: '#6b7280',
+            fontStyle: 'italic'
+        },
 
         // Quick Tips styles
         tipsCard: {
@@ -268,7 +343,7 @@ const Wallet = () => {
         }
     };
 
-    // Add CSS keyframes for animation
+    // Add responsive styles and CSS keyframes for animation
     React.useEffect(() => {
         const style = document.createElement('style');
         style.textContent = `
@@ -367,7 +442,12 @@ const Wallet = () => {
                         </div>
                         <h3 style={styles.quickActionTitle}>Money Received</h3>
                     </div>
-                    <p style={styles.quickActionAmount}>₹ 0</p>
+                    <p style={styles.quickActionAmount}>
+                        {isLoadingTransactions 
+                            ? <span style={styles.loadingText}>Loading...</span>
+                            : formatCurrency(transactionStats.moneyReceived)
+                        }
+                    </p>
                     <p style={{
                         ...styles.quickActionSubtitle,
                         ...styles.quickActionSubtitleGreen
@@ -387,7 +467,12 @@ const Wallet = () => {
                         </div>
                         <h3 style={styles.quickActionTitle}>Money Sent</h3>
                     </div>
-                    <p style={styles.quickActionAmount}>₹ 0</p>
+                    <p style={styles.quickActionAmount}>
+                        {isLoadingTransactions 
+                            ? <span style={styles.loadingText}>Loading...</span>
+                            : formatCurrency(transactionStats.moneySent)
+                        }
+                    </p>
                     <p style={{
                         ...styles.quickActionSubtitle,
                         ...styles.quickActionSubtitleRed
@@ -407,7 +492,12 @@ const Wallet = () => {
                         </div>
                         <h3 style={styles.quickActionTitle}>Transactions</h3>
                     </div>
-                    <p style={styles.quickActionAmount}>0</p>
+                    <p style={styles.quickActionAmount}>
+                        {isLoadingTransactions 
+                            ? <span style={styles.loadingText}>Loading...</span>
+                            : transactionStats.totalTransactions
+                        }
+                    </p>
                     <p style={{
                         ...styles.quickActionSubtitle,
                         ...styles.quickActionSubtitleBlue

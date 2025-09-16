@@ -112,67 +112,481 @@ const AdminPanel = () => {
         return users.filter(user => (user.balance || 0) > 0).length;
     };
 
+    // Styles object
+    const styles = {
+        container: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '24px'
+        },
+        loadingContainer: {
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+            padding: '32px'
+        },
+        loadingContent: {
+            textAlign: 'center'
+        },
+        loadingSpinner: {
+            width: '32px',
+            height: '32px',
+            color: '#2563eb',
+            margin: '0 auto 16px auto',
+            animation: 'spin 1s linear infinite'
+        },
+        loadingText: {
+            color: '#6b7280',
+            margin: 0
+        },
+        headerCard: {
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+            padding: '24px'
+        },
+        headerContent: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '24px'
+        },
+        headerLeft: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+        },
+        headerIcon: {
+            backgroundColor: '#fed7aa',
+            padding: '12px',
+            borderRadius: '12px'
+        },
+        headerTitle: {
+            fontSize: '20px',
+            fontWeight: 'bold',
+            color: '#111827',
+            margin: 0
+        },
+        headerSubtitle: {
+            color: '#6b7280',
+            fontSize: '14px',
+            margin: 0
+        },
+        refreshButton: {
+            padding: '8px',
+            borderRadius: '8px',
+            border: '1px solid #e5e7eb',
+            backgroundColor: 'white',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s ease'
+        },
+        statsGrid: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '16px'
+        },
+        statCard: {
+            padding: '16px',
+            borderRadius: '12px'
+        },
+        statCardBlue: {
+            backgroundColor: '#dbeafe'
+        },
+        statCardGreen: {
+            backgroundColor: '#dcfce7'
+        },
+        statCardPurple: {
+            backgroundColor: '#f3e8ff'
+        },
+        statContent: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px'
+        },
+        statLabel: {
+            fontSize: '14px',
+            margin: '0 0 4px 0'
+        },
+        statLabelBlue: {
+            color: '#2563eb'
+        },
+        statLabelGreen: {
+            color: '#16a34a'
+        },
+        statLabelPurple: {
+            color: '#9333ea'
+        },
+        statValue: {
+            fontSize: '20px',
+            fontWeight: 'bold',
+            margin: 0
+        },
+        statValueBlue: {
+            color: '#1e3a8a'
+        },
+        statValueGreen: {
+            color: '#14532d'
+        },
+        statValuePurple: {
+            color: '#581c87'
+        },
+        usersCard: {
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+        },
+        usersHeader: {
+            padding: '24px',
+            borderBottom: '1px solid #f3f4f6'
+        },
+        usersHeaderContent: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+        },
+        usersTitle: {
+            fontSize: '18px',
+            fontWeight: '600',
+            color: '#111827',
+            margin: 0
+        },
+        searchContainer: {
+            position: 'relative',
+            width: '256px'
+        },
+        searchIcon: {
+            position: 'absolute',
+            left: '12px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            color: '#9ca3af',
+            width: '20px',
+            height: '20px'
+        },
+        searchInput: {
+            width: '100%',
+            paddingLeft: '40px',
+            paddingRight: '16px',
+            paddingTop: '8px',
+            paddingBottom: '8px',
+            border: '1px solid #e5e7eb',
+            borderRadius: '8px',
+            fontSize: '14px',
+            outline: 'none',
+            transition: 'all 0.2s ease'
+        },
+        usersList: {
+            maxHeight: '384px',
+            overflowY: 'auto'
+        },
+        userItem: {
+            padding: '24px',
+            borderBottom: '1px solid #f3f4f6',
+            transition: 'background-color 0.2s ease',
+            cursor: 'default'
+        },
+        userItemContent: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+        },
+        userLeft: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px'
+        },
+        userAvatar: {
+            backgroundColor: '#f3f4f6',
+            padding: '8px',
+            borderRadius: '8px'
+        },
+        userName: {
+            fontWeight: '500',
+            color: '#111827',
+            margin: '0 0 4px 0'
+        },
+        userEmail: {
+            fontSize: '14px',
+            color: '#6b7280',
+            margin: '0 0 2px 0'
+        },
+        userPhone: {
+            fontSize: '14px',
+            color: '#6b7280',
+            margin: '0 0 4px 0'
+        },
+        userJoinDate: {
+            fontSize: '12px',
+            color: '#9ca3af',
+            margin: 0
+        },
+        userRight: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px'
+        },
+        userBalance: {
+            textAlign: 'right'
+        },
+        userBalanceAmount: {
+            fontWeight: '600',
+            color: '#111827',
+            margin: '0 0 4px 0'
+        },
+        userBalanceLabel: {
+            fontSize: '14px',
+            color: '#6b7280',
+            margin: 0
+        },
+        adjustButton: {
+            padding: '8px 16px',
+            backgroundColor: '#2563eb',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '14px',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s ease'
+        },
+        noUsers: {
+            padding: '32px',
+            textAlign: 'center'
+        },
+        noUsersIcon: {
+            width: '48px',
+            height: '48px',
+            color: '#9ca3af',
+            margin: '0 auto 16px auto'
+        },
+        noUsersText: {
+            color: '#6b7280',
+            margin: 0
+        },
+        modal: {
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 50
+        },
+        modalContent: {
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            padding: '24px',
+            width: '100%',
+            maxWidth: '448px',
+            margin: '16px'
+        },
+        modalTitle: {
+            fontSize: '18px',
+            fontWeight: '600',
+            color: '#111827',
+            margin: '0 0 16px 0'
+        },
+        modalSection: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px'
+        },
+        currentBalanceCard: {
+            backgroundColor: '#f9fafb',
+            padding: '16px',
+            borderRadius: '8px'
+        },
+        currentBalanceLabel: {
+            fontSize: '14px',
+            color: '#6b7280',
+            margin: '0 0 4px 0'
+        },
+        currentBalanceAmount: {
+            fontSize: '20px',
+            fontWeight: 'bold',
+            color: '#111827',
+            margin: 0
+        },
+        adjustTypeContainer: {
+            display: 'flex',
+            flexDirection: 'column'
+        },
+        adjustTypeLabel: {
+            fontSize: '14px',
+            fontWeight: '500',
+            color: '#374151',
+            marginBottom: '8px'
+        },
+        adjustTypeButtons: {
+            display: 'flex',
+            gap: '8px'
+        },
+        adjustTypeButton: {
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            padding: '8px 16px',
+            borderRadius: '8px',
+            border: '1px solid',
+            cursor: 'pointer',
+            transition: 'all 0.2s ease',
+            fontSize: '14px'
+        },
+        adjustTypeButtonAdd: {
+            backgroundColor: '#f0fdf4',
+            borderColor: '#bbf7d0',
+            color: '#15803d'
+        },
+        adjustTypeButtonSubtract: {
+            backgroundColor: '#fef2f2',
+            borderColor: '#fecaca',
+            color: '#dc2626'
+        },
+        adjustTypeButtonInactive: {
+            borderColor: '#d1d5db',
+            color: '#374151',
+            backgroundColor: 'white'
+        },
+        amountContainer: {
+            display: 'flex',
+            flexDirection: 'column'
+        },
+        amountLabel: {
+            fontSize: '14px',
+            fontWeight: '500',
+            color: '#374151',
+            marginBottom: '8px'
+        },
+        amountInput: {
+            width: '100%',
+            padding: '12px 16px',
+            border: '1px solid #e5e7eb',
+            borderRadius: '8px',
+            fontSize: '16px',
+            outline: 'none',
+            transition: 'all 0.2s ease'
+        },
+        newBalanceCard: {
+            backgroundColor: '#eff6ff',
+            padding: '16px',
+            borderRadius: '8px'
+        },
+        newBalanceLabel: {
+            fontSize: '14px',
+            color: '#2563eb',
+            margin: '0 0 4px 0'
+        },
+        newBalanceAmount: {
+            fontSize: '20px',
+            fontWeight: 'bold',
+            color: '#1e40af',
+            margin: 0
+        },
+        modalButtons: {
+            display: 'flex',
+            gap: '12px',
+            marginTop: '24px'
+        },
+        cancelButton: {
+            flex: 1,
+            padding: '12px 16px',
+            border: '1px solid #d1d5db',
+            color: '#374151',
+            backgroundColor: 'white',
+            borderRadius: '8px',
+            fontSize: '16px',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s ease'
+        },
+        confirmButton: {
+            flex: 1,
+            padding: '12px 16px',
+            borderRadius: '8px',
+            border: 'none',
+            color: 'white',
+            fontSize: '16px',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s ease'
+        },
+        confirmButtonAdd: {
+            backgroundColor: '#16a34a'
+        },
+        confirmButtonSubtract: {
+            backgroundColor: '#dc2626'
+        },
+        confirmButtonDisabled: {
+            opacity: 0.5,
+            cursor: 'not-allowed'
+        }
+    };
+
     if (loading) {
         return (
-            <div className="bg-white rounded-2xl shadow-sm p-8">
-                <div className="text-center">
-                    <RefreshCw className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
-                    <p className="text-gray-600">Loading admin panel...</p>
+            <div style={styles.loadingContainer}>
+                <div style={styles.loadingContent}>
+                    <RefreshCw style={styles.loadingSpinner} />
+                    <p style={styles.loadingText}>Loading admin panel...</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="space-y-6">
+        <div style={styles.container}>
             {/* Header */}
-            <div className="bg-white rounded-2xl shadow-sm p-6">
-                <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center space-x-3">
-                        <div className="bg-orange-100 p-3 rounded-xl">
-                            <Settings className="w-6 h-6 text-orange-600" />
+            <div style={styles.headerCard}>
+                <div style={styles.headerContent}>
+                    <div style={styles.headerLeft}>
+                        <div style={styles.headerIcon}>
+                            <Settings style={{ width: '24px', height: '24px', color: '#ea580c' }} />
                         </div>
                         <div>
-                            <h2 className="text-xl font-bold text-gray-900">Admin Panel</h2>
-                            <p className="text-gray-600 text-sm">Manage users and balances</p>
+                            <h2 style={styles.headerTitle}>Admin Panel</h2>
+                            <p style={styles.headerSubtitle}>Manage users and balances</p>
                         </div>
                     </div>
                     <button
                         onClick={loadUsers}
-                        className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+                        style={styles.refreshButton}
+                        onMouseEnter={(e) => e.target.style.backgroundColor = '#f9fafb'}
+                        onMouseLeave={(e) => e.target.style.backgroundColor = 'white'}
                     >
-                        <RefreshCw className="w-5 h-5 text-gray-600" />
+                        <RefreshCw style={{ width: '20px', height: '20px', color: '#6b7280' }} />
                     </button>
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-blue-50 p-4 rounded-xl">
-                        <div className="flex items-center space-x-3">
-                            <Users className="w-5 h-5 text-blue-600" />
+                <div style={styles.statsGrid}>
+                    <div style={{ ...styles.statCard, ...styles.statCardBlue }}>
+                        <div style={styles.statContent}>
+                            <Users style={{ width: '20px', height: '20px', color: '#2563eb' }} />
                             <div>
-                                <p className="text-sm text-blue-600">Total Users</p>
-                                <p className="text-xl font-bold text-blue-900">{users.length}</p>
+                                <p style={{ ...styles.statLabel, ...styles.statLabelBlue }}>Total Users</p>
+                                <p style={{ ...styles.statValue, ...styles.statValueBlue }}>{users.length}</p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-green-50 p-4 rounded-xl">
-                        <div className="flex items-center space-x-3">
-                            <UserIcon className="w-5 h-5 text-green-600" />
+                    <div style={{ ...styles.statCard, ...styles.statCardGreen }}>
+                        <div style={styles.statContent}>
+                            <UserIcon style={{ width: '20px', height: '20px', color: '#16a34a' }} />
                             <div>
-                                <p className="text-sm text-green-600">Active Users</p>
-                                <p className="text-xl font-bold text-green-900">{getActiveUsers()}</p>
+                                <p style={{ ...styles.statLabel, ...styles.statLabelGreen }}>Active Users</p>
+                                <p style={{ ...styles.statValue, ...styles.statValueGreen }}>{getActiveUsers()}</p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-purple-50 p-4 rounded-xl">
-                        <div className="flex items-center space-x-3">
-                            <DollarSign className="w-5 h-5 text-purple-600" />
+                    <div style={{ ...styles.statCard, ...styles.statCardPurple }}>
+                        <div style={styles.statContent}>
+                            <DollarSign style={{ width: '20px', height: '20px', color: '#9333ea' }} />
                             <div>
-                                <p className="text-sm text-purple-600">Total Balance</p>
-                                <p className="text-xl font-bold text-purple-900">
+                                <p style={{ ...styles.statLabel, ...styles.statLabelPurple }}>Total Balance</p>
+                                <p style={{ ...styles.statValue, ...styles.statValuePurple }}>
                                     {formatCurrency(getTotalBalance())}
                                 </p>
                             </div>
@@ -182,53 +596,68 @@ const AdminPanel = () => {
             </div>
 
             {/* Users Management */}
-            <div className="bg-white rounded-2xl shadow-sm">
-                <div className="p-6 border-b border-gray-100">
-                    <div className="flex items-center justify-between">
-                        <h3 className="text-lg font-semibold text-gray-900">User Management</h3>
-                        <div className="relative w-64">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <div style={styles.usersCard}>
+                <div style={styles.usersHeader}>
+                    <div style={styles.usersHeaderContent}>
+                        <h3 style={styles.usersTitle}>User Management</h3>
+                        <div style={styles.searchContainer}>
+                            <Search style={styles.searchIcon} />
                             <input
                                 type="text"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                style={styles.searchInput}
                                 placeholder="Search users..."
+                                onFocus={(e) => {
+                                    e.target.style.borderColor = '#3b82f6';
+                                    e.target.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.5)';
+                                }}
+                                onBlur={(e) => {
+                                    e.target.style.borderColor = '#e5e7eb';
+                                    e.target.style.boxShadow = 'none';
+                                }}
                             />
                         </div>
                     </div>
                 </div>
 
-                <div className="divide-y divide-gray-100 max-h-96 overflow-y-auto">
+                <div style={styles.usersList}>
                     {filteredUsers.map((user) => (
-                        <div key={user.uid} className="p-6 hover:bg-gray-50 transition-colors">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center space-x-4">
-                                    <div className="bg-gray-100 p-2 rounded-lg">
-                                        <UserIcon className="w-5 h-5 text-gray-600" />
+                        <div 
+                            key={user.uid} 
+                            style={styles.userItem}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#f9fafb'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = 'white'}
+                        >
+                            <div style={styles.userItemContent}>
+                                <div style={styles.userLeft}>
+                                    <div style={styles.userAvatar}>
+                                        <UserIcon style={{ width: '20px', height: '20px', color: '#6b7280' }} />
                                     </div>
                                     <div>
-                                        <p className="font-medium text-gray-900">{user.name}</p>
-                                        <p className="text-sm text-gray-600">{user.email}</p>
+                                        <p style={styles.userName}>{user.name}</p>
+                                        <p style={styles.userEmail}>{user.email}</p>
                                         {user.phone && (
-                                            <p className="text-sm text-gray-600">{user.phone}</p>
+                                            <p style={styles.userPhone}>{user.phone}</p>
                                         )}
-                                        <p className="text-xs text-gray-500 mt-1">
+                                        <p style={styles.userJoinDate}>
                                             Joined: {formatDate(user.createdAt)}
                                         </p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-center space-x-4">
-                                    <div className="text-right">
-                                        <p className="font-semibold text-gray-900">
+                                <div style={styles.userRight}>
+                                    <div style={styles.userBalance}>
+                                        <p style={styles.userBalanceAmount}>
                                             {formatCurrency(user.balance || 0)}
                                         </p>
-                                        <p className="text-sm text-gray-600">Balance</p>
+                                        <p style={styles.userBalanceLabel}>Balance</p>
                                     </div>
                                     <button
                                         onClick={() => setSelectedUser(user)}
-                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                                        style={styles.adjustButton}
+                                        onMouseEnter={(e) => e.target.style.backgroundColor = '#1d4ed8'}
+                                        onMouseLeave={(e) => e.target.style.backgroundColor = '#2563eb'}
                                     >
                                         Adjust
                                     </button>
@@ -239,75 +668,109 @@ const AdminPanel = () => {
                 </div>
 
                 {filteredUsers.length === 0 && (
-                    <div className="p-8 text-center">
-                        <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                        <p className="text-gray-600">No users found</p>
+                    <div style={styles.noUsers}>
+                        <Users style={styles.noUsersIcon} />
+                        <p style={styles.noUsersText}>No users found</p>
                     </div>
                 )}
             </div>
 
             {/* Balance Adjustment Modal */}
             {selectedUser && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                <div style={styles.modal}>
+                    <div style={styles.modalContent}>
+                        <h3 style={styles.modalTitle}>
                             Adjust Balance - {selectedUser.name}
                         </h3>
 
-                        <div className="space-y-4">
-                            <div className="bg-gray-50 p-4 rounded-lg">
-                                <p className="text-sm text-gray-600">Current Balance</p>
-                                <p className="text-xl font-bold text-gray-900">
+                        <div style={styles.modalSection}>
+                            <div style={styles.currentBalanceCard}>
+                                <p style={styles.currentBalanceLabel}>Current Balance</p>
+                                <p style={styles.currentBalanceAmount}>
                                     {formatCurrency(selectedUser.balance || 0)}
                                 </p>
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <div style={styles.adjustTypeContainer}>
+                                <label style={styles.adjustTypeLabel}>
                                     Adjustment Type
                                 </label>
-                                <div className="flex space-x-2">
+                                <div style={styles.adjustTypeButtons}>
                                     <button
                                         onClick={() => setAdjustType('add')}
-                                        className={`flex-1 flex items-center justify-center space-x-2 py-2 px-4 rounded-lg border transition-colors ${adjustType === 'add'
-                                                ? 'bg-green-50 border-green-300 text-green-700'
-                                                : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                                            }`}
+                                        style={{
+                                            ...styles.adjustTypeButton,
+                                            ...(adjustType === 'add' 
+                                                ? styles.adjustTypeButtonAdd 
+                                                : styles.adjustTypeButtonInactive
+                                            )
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            if (adjustType !== 'add') {
+                                                e.target.style.backgroundColor = '#f9fafb';
+                                            }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            if (adjustType !== 'add') {
+                                                e.target.style.backgroundColor = 'white';
+                                            }
+                                        }}
                                     >
-                                        <Plus className="w-4 h-4" />
+                                        <Plus style={{ width: '16px', height: '16px' }} />
                                         <span>Add Money</span>
                                     </button>
                                     <button
                                         onClick={() => setAdjustType('subtract')}
-                                        className={`flex-1 flex items-center justify-center space-x-2 py-2 px-4 rounded-lg border transition-colors ${adjustType === 'subtract'
-                                                ? 'bg-red-50 border-red-300 text-red-700'
-                                                : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                                            }`}
+                                        style={{
+                                            ...styles.adjustTypeButton,
+                                            ...(adjustType === 'subtract' 
+                                                ? styles.adjustTypeButtonSubtract 
+                                                : styles.adjustTypeButtonInactive
+                                            )
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            if (adjustType !== 'subtract') {
+                                                e.target.style.backgroundColor = '#f9fafb';
+                                            }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            if (adjustType !== 'subtract') {
+                                                e.target.style.backgroundColor = 'white';
+                                            }
+                                        }}
                                     >
-                                        <Minus className="w-4 h-4" />
+                                        <Minus style={{ width: '16px', height: '16px' }} />
                                         <span>Subtract Money</span>
                                     </button>
                                 </div>
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <div style={styles.amountContainer}>
+                                <label style={styles.amountLabel}>
                                     Amount (₹)
                                 </label>
                                 <input
                                     type="number"
                                     value={adjustAmount}
                                     onChange={(e) => setAdjustAmount(e.target.value)}
-                                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    style={styles.amountInput}
                                     placeholder="Enter amount"
                                     min="1"
+                                    onFocus={(e) => {
+                                        e.target.style.borderColor = '#3b82f6';
+                                        e.target.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.5)';
+                                    }}
+                                    onBlur={(e) => {
+                                        e.target.style.borderColor = '#e5e7eb';
+                                        e.target.style.boxShadow = 'none';
+                                    }}
                                 />
                             </div>
 
                             {adjustAmount && (
-                                <div className="bg-blue-50 p-4 rounded-lg">
-                                    <p className="text-sm text-blue-600">New Balance Will Be</p>
-                                    <p className="text-xl font-bold text-blue-900">
+                                <div style={styles.newBalanceCard}>
+                                    <p style={styles.newBalanceLabel}>New Balance Will Be</p>
+                                    <p style={styles.newBalanceAmount}>
                                         {formatCurrency(
                                             adjustType === 'add'
                                                 ? selectedUser.balance + parseFloat(adjustAmount || 0)
@@ -318,24 +781,40 @@ const AdminPanel = () => {
                             )}
                         </div>
 
-                        <div className="flex space-x-3 mt-6">
+                        <div style={styles.modalButtons}>
                             <button
                                 onClick={() => {
                                     setSelectedUser(null);
                                     setAdjustAmount('');
                                     setAdjustType('add');
                                 }}
-                                className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                                style={styles.cancelButton}
+                                onMouseEnter={(e) => e.target.style.backgroundColor = '#f9fafb'}
+                                onMouseLeave={(e) => e.target.style.backgroundColor = 'white'}
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleBalanceAdjustment}
                                 disabled={isProcessing || !adjustAmount}
-                                className={`flex-1 py-3 px-4 rounded-lg transition-colors text-white ${adjustType === 'add'
-                                        ? 'bg-green-600 hover:bg-green-700'
-                                        : 'bg-red-600 hover:bg-red-700'
-                                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                                style={{
+                                    ...styles.confirmButton,
+                                    ...(adjustType === 'add' 
+                                        ? styles.confirmButtonAdd 
+                                        : styles.confirmButtonSubtract
+                                    ),
+                                    ...(isProcessing || !adjustAmount ? styles.confirmButtonDisabled : {})
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (!isProcessing && adjustAmount) {
+                                        e.target.style.backgroundColor = adjustType === 'add' ? '#15803d' : '#b91c1c';
+                                    }
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (!isProcessing && adjustAmount) {
+                                        e.target.style.backgroundColor = adjustType === 'add' ? '#16a34a' : '#dc2626';
+                                    }
+                                }}
                             >
                                 {isProcessing ? 'Processing...' : `${adjustType === 'add' ? 'Add' : 'Subtract'} Money`}
                             </button>
@@ -343,8 +822,17 @@ const AdminPanel = () => {
                     </div>
                 </div>
             )}
+
+            <style>
+                {`
+                    @keyframes spin {
+                        from { transform: rotate(0deg); }
+                        to { transform: rotate(360deg); }
+                    }
+                `}
+            </style>
         </div>
     );
 };
 
-export default AdminPanel;
+export default AdminPanel; 
