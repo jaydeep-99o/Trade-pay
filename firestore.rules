@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+
+    function authed() { return request.auth != null; }
+
+    // --- Users (TEMP DEV) ---
+    match /users/{uid} {
+      // allow everyone signed-in to read all users (so search works)
+      allow read: if authed();
+
+      // owner can create/update basic profile fields
+      allow create: if authed() && request.auth.uid == uid;
+      allow update: if authed() && request.auth.uid == uid
+        && request.writeFields.hasOnly(['name','phone','email','updatedAt']);
+
+      // ❌ TEMP ONLY: allow any signed-in client to update balances
+      // (enables client-side transfer to touch both users)
+      allow update: if authed()
+        && request.writeFields.hasOnly(['balance','updatedAt'])
+        && request.resource.data.balance is int
+        && request.resource.data.balance >= 0;
+    }
+
+    // Transactions: involved parties can read; allow create from client (TEMP)
+    match /transactions/{txId} {
+      allow read: if authed() &&
+        (request.auth.uid == resource.data.fromUid || request.auth.uid == resource.data.toUid);
+      // TEMP: let client create a ledger entry
+      allow create: if authed();
+      allow update, delete: if false;
+    }
+
+    // TransferRequests (you can keep or ignore while in DEV)
+    match /transferRequests/{id} {
+      allow read, create: if authed();
+      allow update, delete: if false;
+    }
+
+    match /{document=**} { allow read, write: if false; }
+  }
+}

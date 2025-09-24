@@ -1,4 +1,5 @@
 import React from 'react';
+import './App.css';                      // <-- IMPORTANT
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Dashboard from './components/dashboard/Dashboard';
