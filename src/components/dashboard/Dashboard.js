@@ -19,7 +19,7 @@ const Dashboard = () => {
     const { userData } = useAuth();
   
 
-    const isAdmin = userData?.email === 'admin@tradepay.com'; // Simple admin check
+  const isAdmin = userData?.isAdmin === true;// Simple admin check
 
     const navigationItems = [
         { id: 'home', label: 'Home', icon: Home },

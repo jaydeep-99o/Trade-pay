@@ -1,9 +1,9 @@
-// src/components/admin/AdminPanel.js
 import React, { useState, useEffect } from 'react';
 import {
     getAllUsers,
     updateUserBalance,
-    getUserData
+    getUserData,
+    getUserTransactions
 } from '../../firebase/firestore';
 import {
     Settings,
@@ -13,7 +13,11 @@ import {
     Minus,
     RefreshCw,
     Search,
-    User as UserIcon
+    User as UserIcon,
+    ArrowUpCircle,
+    ArrowDownCircle,
+    X,
+    History
 } from 'lucide-react';
 
 const AdminPanel = () => {
@@ -22,8 +26,12 @@ const AdminPanel = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedUser, setSelectedUser] = useState(null);
     const [adjustAmount, setAdjustAmount] = useState('');
-    const [adjustType, setAdjustType] = useState('add'); // add or subtract
+    const [adjustType, setAdjustType] = useState('add');
     const [isProcessing, setIsProcessing] = useState(false);
+    const [showTransactions, setShowTransactions] = useState(false);
+    const [viewingUser, setViewingUser] = useState(null);
+    const [userTransactions, setUserTransactions] = useState([]);
+    const [loadingTransactions, setLoadingTransactions] = useState(false);
 
     useEffect(() => {
         loadUsers();
@@ -68,6 +76,25 @@ const AdminPanel = () => {
         });
     };
 
+    const formatDateTime = (timestamp) => {
+        if (!timestamp) return 'Unknown';
+
+        let date;
+        if (timestamp.seconds) {
+            date = new Date(timestamp.seconds * 1000);
+        } else {
+            date = new Date(timestamp);
+        }
+
+        return date.toLocaleString('en-IN', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
     const handleBalanceAdjustment = async () => {
         if (!selectedUser || !adjustAmount) return;
 
@@ -86,7 +113,6 @@ const AdminPanel = () => {
         const result = await updateUserBalance(selectedUser.uid, newBalance);
 
         if (result.success) {
-            // Update local state
             setUsers(prevUsers =>
                 prevUsers.map(user =>
                     user.uid === selectedUser.uid
@@ -95,13 +121,41 @@ const AdminPanel = () => {
                 )
             );
 
-            // Close modal
             setSelectedUser(null);
             setAdjustAmount('');
             setAdjustType('add');
         }
 
         setIsProcessing(false);
+    };
+
+    const handleViewTransactions = async (user) => {
+        console.log('🔍 Opening transaction history for user:', user);
+        setViewingUser(user);
+        setShowTransactions(true);
+        setLoadingTransactions(true);
+        setUserTransactions([]);
+        
+        // Fetch transactions for this user
+        try {
+            console.log('🚀 Fetching transactions for UID:', user.uid);
+            const result = await getUserTransactions(user.uid);
+            console.log('📦 Transaction result:', result);
+            
+            if (result.success) {
+                console.log('✅ Successfully loaded transactions:', result.transactions);
+                console.log('📊 Number of transactions:', result.transactions?.length || 0);
+                setUserTransactions(result.transactions || []);
+            } else {
+                console.error('❌ Failed to load transactions:', result.error);
+                setUserTransactions([]);
+            }
+        } catch (error) {
+            console.error('💥 Error fetching transactions:', error);
+            setUserTransactions([]);
+        }
+        
+        setLoadingTransactions(false);
     };
 
     const getTotalBalance = () => {
@@ -112,7 +166,6 @@ const AdminPanel = () => {
         return users.filter(user => (user.balance || 0) > 0).length;
     };
 
-    // Styles object
     const styles = {
         container: {
             display: 'flex',
@@ -338,6 +391,10 @@ const AdminPanel = () => {
             color: '#6b7280',
             margin: 0
         },
+        userActions: {
+            display: 'flex',
+            gap: '8px'
+        },
         adjustButton: {
             padding: '8px 16px',
             backgroundColor: '#2563eb',
@@ -347,6 +404,19 @@ const AdminPanel = () => {
             fontSize: '14px',
             cursor: 'pointer',
             transition: 'background-color 0.2s ease'
+        },
+        historyButton: {
+            padding: '8px 12px',
+            backgroundColor: '#f3f4f6',
+            color: '#374151',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '14px',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s ease',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px'
         },
         noUsers: {
             padding: '32px',
@@ -380,13 +450,32 @@ const AdminPanel = () => {
             padding: '24px',
             width: '100%',
             maxWidth: '448px',
-            margin: '16px'
+            margin: '16px',
+            maxHeight: '90vh',
+            overflowY: 'auto'
+        },
+        modalContentLarge: {
+            maxWidth: '800px'
+        },
+        modalHeader: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '16px'
         },
         modalTitle: {
             fontSize: '18px',
             fontWeight: '600',
             color: '#111827',
-            margin: '0 0 16px 0'
+            margin: 0
+        },
+        closeButton: {
+            padding: '4px',
+            backgroundColor: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            borderRadius: '4px',
+            transition: 'background-color 0.2s ease'
         },
         modalSection: {
             display: 'flex',
@@ -521,6 +610,79 @@ const AdminPanel = () => {
         confirmButtonDisabled: {
             opacity: 0.5,
             cursor: 'not-allowed'
+        },
+        transactionsList: {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            marginTop: '16px'
+        },
+        transactionItem: {
+            padding: '16px',
+            borderRadius: '8px',
+            border: '1px solid #e5e7eb',
+            transition: 'background-color 0.2s ease'
+        },
+        transactionItemContent: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+        },
+        transactionLeft: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            flex: 1
+        },
+        transactionIcon: {
+            width: '40px',
+            height: '40px',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        },
+        transactionIconCredit: {
+            backgroundColor: '#dcfce7'
+        },
+        transactionIconDebit: {
+            backgroundColor: '#fee2e2'
+        },
+        transactionDetails: {
+            flex: 1
+        },
+        transactionDescription: {
+            fontWeight: '500',
+            color: '#111827',
+            margin: '0 0 4px 0',
+            fontSize: '14px'
+        },
+        transactionDate: {
+            fontSize: '12px',
+            color: '#9ca3af',
+            margin: 0
+        },
+        transactionRight: {
+            textAlign: 'right'
+        },
+        transactionAmount: {
+            fontSize: '16px',
+            fontWeight: '700',
+            margin: 0
+        },
+        transactionAmountCredit: {
+            color: '#16a34a'
+        },
+        transactionAmountDebit: {
+            color: '#dc2626'
+        },
+        noTransactions: {
+            padding: '40px 24px',
+            textAlign: 'center'
+        },
+        noTransactionsText: {
+            color: '#6b7280',
+            fontSize: '14px'
         }
     };
 
@@ -626,8 +788,8 @@ const AdminPanel = () => {
                         <div 
                             key={user.uid} 
                             style={styles.userItem}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = '#f9fafb'}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = 'white'}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
                         >
                             <div style={styles.userItemContent}>
                                 <div style={styles.userLeft}>
@@ -653,14 +815,25 @@ const AdminPanel = () => {
                                         </p>
                                         <p style={styles.userBalanceLabel}>Balance</p>
                                     </div>
-                                    <button
-                                        onClick={() => setSelectedUser(user)}
-                                        style={styles.adjustButton}
-                                        onMouseEnter={(e) => e.target.style.backgroundColor = '#1d4ed8'}
-                                        onMouseLeave={(e) => e.target.style.backgroundColor = '#2563eb'}
-                                    >
-                                        Adjust
-                                    </button>
+                                    <div style={styles.userActions}>
+                                        <button
+                                            onClick={() => handleViewTransactions(user)}
+                                            style={styles.historyButton}
+                                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e5e7eb'}
+                                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+                                        >
+                                            <History style={{ width: '16px', height: '16px' }} />
+                                            History
+                                        </button>
+                                        <button
+                                            onClick={() => setSelectedUser(user)}
+                                            style={styles.adjustButton}
+                                            onMouseEnter={(e) => e.target.style.backgroundColor = '#1d4ed8'}
+                                            onMouseLeave={(e) => e.target.style.backgroundColor = '#2563eb'}
+                                        >
+                                            Adjust
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -823,6 +996,112 @@ const AdminPanel = () => {
                 </div>
             )}
 
+            {/* Transaction History Modal */}
+            {showTransactions && viewingUser && (
+                <div style={styles.modal}>
+                    <div style={{ ...styles.modalContent, ...styles.modalContentLarge }}>
+                        <div style={styles.modalHeader}>
+                            <h3 style={styles.modalTitle}>
+                                Transaction History - {viewingUser.name}
+                            </h3>
+                            <button
+                                onClick={() => {
+                                    setShowTransactions(false);
+                                    setViewingUser(null);
+                                    setUserTransactions([]);
+                                }}
+                                style={styles.closeButton}
+                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                            >
+                                <X style={{ width: '20px', height: '20px', color: '#6b7280' }} />
+                            </button>
+                        </div>
+
+                        <div style={styles.currentBalanceCard}>
+                            <p style={styles.currentBalanceLabel}>Current Balance</p>
+                            <p style={styles.currentBalanceAmount}>
+                                {formatCurrency(viewingUser.balance || 0)}
+                            </p>
+                        </div>
+
+                        {loadingTransactions ? (
+                            <div style={styles.noTransactions}>
+                                <RefreshCw style={{ ...styles.noUsersIcon, animation: 'spin 1s linear infinite' }} />
+                                <p style={styles.noTransactionsText}>Loading transactions...</p>
+                            </div>
+                        ) : userTransactions.length > 0 ? (
+                            <div style={styles.transactionsList}>
+                                {userTransactions.map((transaction, index) => {
+                                    const isReceived = transaction.type === 'received';
+                                    const isSent = transaction.type === 'sent';
+                                    
+                                    return (
+                                        <div
+                                            key={transaction.id || index}
+                                            style={styles.transactionItem}
+                                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
+                                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+                                        >
+                                            <div style={styles.transactionItemContent}>
+                                                <div style={styles.transactionLeft}>
+                                                    <div style={{
+                                                        ...styles.transactionIcon,
+                                                        ...(isReceived 
+                                                            ? styles.transactionIconCredit 
+                                                            : styles.transactionIconDebit
+                                                        )
+                                                    }}>
+                                                        {isReceived ? (
+                                                            <ArrowUpCircle style={{ width: '20px', height: '20px', color: '#16a34a' }} />
+                                                        ) : (
+                                                            <ArrowDownCircle style={{ width: '20px', height: '20px', color: '#dc2626' }} />
+                                                        )}
+                                                    </div>
+
+                                                    <div style={styles.transactionDetails}>
+                                                        <p style={styles.transactionDescription}>
+                                                            {isReceived 
+                                                                ? `Received from ${transaction.fromName}` 
+                                                                : `Sent to ${transaction.toName}`}
+                                                        </p>
+                                                        {transaction.description && (
+                                                            <p style={{ ...styles.transactionDate, marginBottom: '4px', color: '#6b7280' }}>
+                                                                {transaction.description}
+                                                            </p>
+                                                        )}
+                                                        <p style={styles.transactionDate}>
+                                                            {formatDateTime(transaction.timestamp)}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div style={styles.transactionRight}>
+                                                    <p style={{
+                                                        ...styles.transactionAmount,
+                                                        ...(isReceived 
+                                                            ? styles.transactionAmountCredit 
+                                                            : styles.transactionAmountDebit
+                                                        )
+                                                    }}>
+                                                        {isReceived ? '+' : '-'}
+                                                        {formatCurrency(transaction.amount || 0)}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <div style={styles.noTransactions}>
+                                <p style={styles.noTransactionsText}>No transactions yet</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
             <style>
                 {`
                     @keyframes spin {
@@ -835,4 +1114,4 @@ const AdminPanel = () => {
     );
 };
 
-export default AdminPanel; 
+export default AdminPanel;
