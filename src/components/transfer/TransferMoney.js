@@ -57,7 +57,7 @@ const TransferMoney = () => {
         }
 
         if (transferAmount < 1) {
-            setError('Minimum transfer amount is ₹1');
+            setError('Minimum transfer amount is $1');
             return false;
         }
 
@@ -646,7 +646,7 @@ const TransferMoney = () => {
 
                         <div style={styles.formGroup}>
                             <label style={styles.label}>
-                                Amount (₹)
+                                Amount ($)
                             </label>
                             <input
                                 type="number"

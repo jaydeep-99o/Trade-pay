@@ -400,7 +400,7 @@ const Wallet = () => {
                         <span style={styles.balanceAmount}>
                             {showBalance
                                 ? formatCurrency(userData?.balance || 0)
-                                : '₹ ••••••'
+                                : '$ ••••••'
                             }
                         </span>
                         <button

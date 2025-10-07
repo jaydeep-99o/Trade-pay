@@ -920,7 +920,7 @@ const AdminPanel = () => {
 
                             <div style={styles.amountContainer}>
                                 <label style={styles.amountLabel}>
-                                    Amount (₹)
+                                    Amount ($)
                                 </label>
                                 <input
                                     type="number"
